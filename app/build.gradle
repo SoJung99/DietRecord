@@ -32,4 +32,6 @@ dependencies {
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
 
+    // 카카오 음성
+    implementation 'com.kakao.sdk:newtone:6.1.4'
 }
