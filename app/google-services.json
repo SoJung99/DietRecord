@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "638209711371",
+    "project_id": "dietrecord-263b8",
+    "storage_bucket": "dietrecord-263b8.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:638209711371:android:255d28e182187d6a64560e",
+        "android_client_info": {
+          "package_name": "org.techtown.dietrecord"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "638209711371-tfk5f71bagrtgldfug588agp951k0ldt.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "org.techtown.dietrecord",
+            "certificate_hash": "07d5ca0146fb7f10374cb8de589fe2fbd015d501"
+          }
+        },
+        {
+          "client_id": "638209711371-0c4rnb696rh4ohjbt3rtc8ljjpk5r2n0.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDdK_hNOK3pU3nEDwR-tkxiimm5EP4TEV0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "638209711371-0c4rnb696rh4ohjbt3rtc8ljjpk5r2n0.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

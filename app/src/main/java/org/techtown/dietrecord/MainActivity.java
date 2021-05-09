@@ -1,11 +1,6 @@
 package org.techtown.dietrecord;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-import androidx.core.content.ContextCompat;
-
 import android.Manifest;
-import android.app.Activity;
 import android.app.Application;
 import android.content.Context;
 import android.content.pm.PackageInfo;
@@ -18,20 +13,20 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import com.kakao.auth.IApplicationConfig;
 import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
-
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
-import com.kakao.sdk.newtoneapi.impl.util.PermissionUtils;
-
 
 import java.security.MessageDigest;
 import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity implements View.OnClickListener, SpeechRecognizeListener {
-
 
     private SpeechRecognizerClient client;
 
