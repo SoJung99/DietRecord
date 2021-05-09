@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#B7B9BC">
+
+    <TextView
+        android:id="@+id/exercise"
+        android:layout_width="92dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="35dp"
+        android:layout_marginLeft="35dp"
+        android:background="#FFFFFF"
+        android:text="운동 종류"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/power"
+        android:layout_width="43dp"
+        android:layout_height="wrap_content"
+        android:background="#FFFFFF"
+        android:text="강도"
+        android:textSize="18sp" />
+
+    <TextView
+        android:id="@+id/time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="35dp"
+        android:layout_marginRight="35dp"
+        android:background="#FFFFFF"
+        android:text="시간(분)"
+        android:textSize="18sp" />
+
+
+</LinearLayout>

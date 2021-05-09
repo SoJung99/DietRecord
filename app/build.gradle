@@ -34,4 +34,5 @@ dependencies {
 
     // 탭 레이아웃 사용하려면 이거 추가해야함
     implementation 'com.google.android.material:material:1.2.1'
+    implementation 'androidx.recyclerview:recyclerview:1.1.0'
 }
