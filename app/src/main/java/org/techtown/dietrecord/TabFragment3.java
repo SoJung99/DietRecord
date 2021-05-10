@@ -28,18 +28,20 @@ import com.google.android.material.tabs.TabLayout;
 
 import java.util.ArrayList;
 
-public class TabFragment3 extends Fragment implements View.OnClickListener{
+public class TabFragment3 extends Fragment implements View.OnClickListener, ExerciseAdapter.ExerciseViewClickListener{
 
-    /* 리사이클러뷰
+
     Context context;
-    ArrayList<ExerciseData> list;
-    */
+    ArrayList<ExerciseData> list = new ArrayList<>();
+
+    final ExerciseAdapter adapter = new ExerciseAdapter(list);
+    static int i=0;
 
     Spinner ex_spinner, power_spinner;
     EditText time;
     String[] ex_items = {"걷기","윗몸일으키기","달리기","스쿼트"};
     String[] power_items = {"상","중","하"};
-    TextView record;
+    TextView allcal;
 
     Button voice;
     Button info;
@@ -57,6 +59,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener{
         info = (Button)v.findViewById(R.id.exercise_info);
         submit = (Button)v.findViewById(R.id.submit_bt);
         time = (EditText)v.findViewById(R.id.time_input);
+        allcal = (TextView)v.findViewById(R.id.cal);
 
         voice.setOnClickListener(this);
         info.setOnClickListener(this);
@@ -100,27 +103,23 @@ public class TabFragment3 extends Fragment implements View.OnClickListener{
             }
         });
 
-        /* 리사이클러 뷰
-        list = new ArrayList<>();
 
-        list.add(new ExerciseData("걷기","중","30"));
-        list.add(new ExerciseData("걷기","중","30"));
-        list.add(new ExerciseData("걷기","중","30"));
-        list.add(new ExerciseData("걷기","중","30"));
-        list.add(new ExerciseData("걷기","중","30"));
 
         RecyclerView recyclerView = v.findViewById(R.id.recycle);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        ExerAdapter exerAdapter = new ExerAdapter(list);
-        recyclerView.setAdapter(exerAdapter);
+        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(layoutManager);
 
-        exerAdapter.addItem(new ExerciseData("달리기","상","20"));
-        exerAdapter.notifyDataSetChanged();
-        */
+        for(int i=0; i<5; i++) {
+            list.add(new ExerciseData("걷기", "중", "30"));
+        }
 
-        record = v.findViewById(R.id.exer_record);
-        record.append("\n자고 싶다.");
+        recyclerView.setAdapter(adapter);
+        adapter.setOnClickListener(this);
+
+        allcal.setText(adapter.getAllCalories()+"kcals");
+
+
+
         return v;
     }
 
@@ -155,13 +154,36 @@ public class TabFragment3 extends Fragment implements View.OnClickListener{
             }
             else{
                 ExerciseData dataset = new ExerciseData((String)ex_spinner.getSelectedItem(),(String)power_spinner.getSelectedItem(),time.getText().toString());
-                record.append("\n"+dataset.exercise+"  "+dataset.power+"  "+dataset.time);
-
+                //record.append("\n"+dataset.exercise+"  "+dataset.power+"  "+dataset.time);
+                list.add(0,dataset);
+                adapter.notifyDataSetChanged();
+                time.setText(null);
+                allcal.setText(adapter.getAllCalories()+"kcals");
                 // 데이터베이스에도 추가!
 
             }
         }
 
+    }
+
+    @Override
+    public void onItemClicked(int position) {
+
+    }
+
+    @Override
+    public void onItemLongClicked(int position) {
+        final int p = position;
+        new AlertDialog.Builder(getActivity()).setTitle("기록 삭제")
+                .setMessage("해당 운동 기록을 삭제하시겠습니까?")
+                .setPositiveButton("네",new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dlg, int sumthin){
+                        adapter.remove(p);
+                        allcal.setText(adapter.getAllCalories()+"kcals");
+                    }
+                }).setNegativeButton("아니오",new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dlg, int sumthin) { }
+                }).show();
     }
 }
 
