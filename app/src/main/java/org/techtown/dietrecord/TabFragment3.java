@@ -14,6 +14,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -41,11 +42,14 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     EditText time;
     String[] ex_items = {"걷기","윗몸일으키기","달리기","스쿼트"};
     String[] power_items = {"상","중","하"};
+
     TextView allcal;
+    TextView voice_result;
 
     Button voice;
     Button info;
     Button submit;
+    Button voice_submit;
 
 
     @Nullable
@@ -60,10 +64,13 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         submit = (Button)v.findViewById(R.id.submit_bt);
         time = (EditText)v.findViewById(R.id.time_input);
         allcal = (TextView)v.findViewById(R.id.cal);
+        voice_submit = (Button)v.findViewById(R.id.voice_submit);
+        voice_result = (TextView)v.findViewById(R.id.voice_result);
 
         voice.setOnClickListener(this);
         info.setOnClickListener(this);
         submit.setOnClickListener(this);
+        voice_submit.setOnClickListener(this);
 
 
         ex_spinner = v.findViewById(R.id.exer_spinner);
@@ -135,6 +142,12 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     public void onClick(View view) {
         if(view==voice){
             // 음성인식 처리
+            // voice_result 에 음성인식 결과 저장.
+        }
+        else if(view==voice_submit){
+            // 데이터베이스에 해당 운동 기록 저장
+            // voice_result 를 다시 초기화해줌
+            // adapter의 list에도 기록 추가후 notifyDataSetChanged()를 통해 화면에 해당 기록 추가
         }
         else if(view==info){
             new AlertDialog.Builder(getActivity()).setTitle("운동 입력 정보")
@@ -142,15 +155,17 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                     .setNeutralButton("확인",new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dlg, int sumthin){}
                     }).show();
+
         }
         else if(view==submit){
             if(time.getText().toString().length()==0){
-                new AlertDialog.Builder(getActivity()).setTitle("시간 미입력")
+                /*new AlertDialog.Builder(getActivity()).setTitle("시간 미입력")
                         .setMessage("운동 시간도 입력해주세요.")
                         .setNeutralButton("확인",new DialogInterface.OnClickListener(){
                             public void onClick(DialogInterface dlg, int sumthin){}
                         }).show();
-
+                */
+                Toast.makeText(getActivity(), "운동 시간을 입력해주세요.", Toast.LENGTH_SHORT).show();
             }
             else{
                 ExerciseData dataset = new ExerciseData((String)ex_spinner.getSelectedItem(),(String)power_spinner.getSelectedItem(),time.getText().toString());
