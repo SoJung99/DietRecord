@@ -23,11 +23,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:tabGravity="fill"
-        android:background="#c2c2d6"
-        app:tabIndicatorColor="#ffffff"
-        app:tabMode="fixed"
-
-        >
+        app:tabIndicatorColor="@color/colorPrimary"
+        app:tabMode="fixed">
 
     </com.google.android.material.tabs.TabLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
