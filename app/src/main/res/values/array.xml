@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="itemTime">
+        <item>(식사)</item>
+        <item>아침</item>
+        <item>점심</item>
+        <item>저녁</item>
+        <!--<item>간식</item>-->
+    </string-array>
+
+    <string-array name="itemKind">
+        <item>(음식 종류)</item>
+        <item>사과</item>
+        <item>귤</item>
+        <item>딸기</item>
+        <item>바나나</item>
+        <item>배</item>
+        <item>토마토</item>
+        <item>수박</item>
+        <item>아몬드</item>
+        <item>밥</item>
+        <item>된장찌개</item>
+        <item>김치찌개</item>
+        <item>나머지 넣기!</item>
+        <item>ㄱㄴㄷ?</item>
+    </string-array>
+
+    <string-array name="itemAmount">
+        <item>(양)</item>
+        <item>0.5</item>
+        <item>1</item>
+        <item>1.5</item>
+        <item>2</item>
+        <item>2.5</item>
+        <item>3</item>
+        <item>어디까지?</item>
+    </string-array>
+
+</resources>
