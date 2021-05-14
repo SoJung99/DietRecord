@@ -102,4 +102,3 @@ class ExerciseAdapter extends RecyclerView.Adapter<ExerciseAdapter.ViewHolder>{
         return Integer.toString(a);
     }
 }
-

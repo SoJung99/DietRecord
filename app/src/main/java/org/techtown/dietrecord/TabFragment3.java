@@ -197,8 +197,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                         allcal.setText(adapter.getAllCalories()+"kcals");
                     }
                 }).setNegativeButton("아니오",new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dlg, int sumthin) { }
-                }).show();
+            public void onClick(DialogInterface dlg, int sumthin) { }
+        }).show();
     }
 }
-
