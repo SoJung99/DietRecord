@@ -43,25 +43,30 @@ import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
 
 import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 import java.util.StringTokenizer;
 
 public class TabFragment3 extends Fragment implements View.OnClickListener, ExerciseAdapter.ExerciseViewClickListener, SpeechRecognizeListener {
 
 
     Context context;
-    ArrayList<ExerciseData> list = new ArrayList<>();
+    ArrayList<ExerciseData> list;
 
-    final ExerciseAdapter adapter = new ExerciseAdapter(list);
+    ExerciseAdapter adapter = new ExerciseAdapter(list);
     static int i=0;
 
     Spinner ex_spinner, power_spinner;
     EditText time;
-    String[] ex_items = {"걷기","윗몸일으키기","달리기","스쿼트"};
+    String[] ex_items = {"걷기","달리기","줄넘기","수영","사이클","파워워킹","런지",
+            "스쿼트","윗몸일으키기","푸쉬업","등산","댄스","훌라후프","버피테스트","플랭크","팔벌려뛰기","풀업",
+            "계단오르기","에어로빅","요가","딥스","벤치프레스","로잉머신","짐볼운동","복싱","케틀벨","농구","테니스","축구",
+            "탁구"};
     String[] power_items = {"상","중","하"};
 
     TextView allcal;
     TextView voice_result;
-
+    RecyclerView recyclerView;
     Button voice;
     Button info;
     Button submit;
@@ -169,9 +174,14 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             }
         });
 
+        intitLoadDB();
+
+        adapter.notifyDataSetChanged();
+
+        adapter = new ExerciseAdapter(list);
 
 
-        RecyclerView recyclerView = v.findViewById(R.id.recycle);
+        recyclerView = v.findViewById(R.id.recycle);
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
@@ -198,8 +208,6 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
         new SpeechRecognizerManager().getInstance().initializeLibrary(getActivity());
 
-        intitLoadDB();
-        adapter.notifyDataSetChanged();
 
         return v;
     }
@@ -263,10 +271,26 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 allcal.setText(adapter.getAllCalories()+"kcals");
                 Cursor cur = database.rawQuery("SELECT * FROM 사용자운동", null);
                 Integer n = cur.getCount() + 1;
-                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리) VALUES ("+n+", '"+dataset.exercise+"', '"+dataset.power+"', "+Integer.parseInt(dataset.time)+", "+ Integer.parseInt(dataset.calories)+")";
+                Cursor c = database.rawQuery("SELECT * FROM 운동정보 WHERE 운동구분='"+dataset.exercise+"' AND 운동강도='"+dataset.power+"'", null);
+
+
+                c.moveToFirst();
+                System.out.println(c.getCount());
+                Double a = Integer.parseInt(dataset.time)* c.getDouble(2);
+                System.out.println("칼로리 소모 : "+ a);
+
+
+
+                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리) VALUES ("+n+", '"+dataset.exercise+"', '"+dataset.power+"', "+Integer.parseInt(dataset.time)+", "+ a+")";
                 database.execSQL(sql);
                 list = mDbHelper.getTableData();
+
+                adapter = new ExerciseAdapter(list);
+                 recyclerView.setAdapter(adapter);
+                adapter.setOnClickListener(this);
                 adapter.notifyDataSetChanged();
+                allcal.setText(adapter.getAllCalories()+"kcals");
+
 
             }
         }
@@ -278,6 +302,19 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
     }
 
+    public void removeP(int p){
+        ExerciseData d = list.get(p);
+        String sql = "DELETE FROM 사용자운동 WHERE 운동구분='"+d.exercise+"' AND 강도='"+d.power+"' AND 시간="+d.time+"";
+        database.execSQL(sql);
+        list = mDbHelper.getTableData();
+
+        adapter = new ExerciseAdapter(list);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnClickListener(this);
+        adapter.notifyDataSetChanged();
+        allcal.setText(adapter.getAllCalories()+"kcals");
+
+    }
     @Override
     public void onItemLongClicked(int position) {
         final int p = position;
@@ -285,8 +322,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 .setMessage("해당 운동 기록을 삭제하시겠습니까?")
                 .setPositiveButton("네",new DialogInterface.OnClickListener(){
                     public void onClick(DialogInterface dlg, int sumthin){
-                        adapter.remove(p);
-                        allcal.setText(adapter.getAllCalories()+"kcals");
+                        removeP(p);
                     }
                 }).setNegativeButton("아니오",new DialogInterface.OnClickListener(){
             public void onClick(DialogInterface dlg, int sumthin) { }
