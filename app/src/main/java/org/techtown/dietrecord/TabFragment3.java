@@ -8,6 +8,9 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -68,6 +71,24 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
     private SpeechRecognizerClient client;
 
+    DataAdapter mDbHelper;
+    DataBaseHelper dbHelper;
+    SQLiteDatabase database ;
+
+    public void intitLoadDB(){
+        mDbHelper = new DataAdapter(getActivity().getApplicationContext());
+        mDbHelper.createDatabase();
+        mDbHelper.open();
+
+        dbHelper = new DataBaseHelper(getActivity().getApplicationContext());
+        dbHelper.openDataBase();
+        dbHelper.close();
+        database = dbHelper.getWritableDatabase();
+
+        list = mDbHelper.getTableData();
+
+        //mDbHelper.close();
+    }
     public class MyApplication extends Application {
 
         @Override
@@ -154,9 +175,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
 
-        for(int i=0; i<5; i++) {
-            list.add(new ExerciseData("걷기", "중", "30"));
-        }
+
 
         recyclerView.setAdapter(adapter);
         adapter.setOnClickListener(this);
@@ -179,6 +198,8 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
         new SpeechRecognizerManager().getInstance().initializeLibrary(getActivity());
 
+        intitLoadDB();
+        adapter.notifyDataSetChanged();
 
         return v;
     }
@@ -235,11 +256,17 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             }
             else{
                 ExerciseData dataset = new ExerciseData((String)ex_spinner.getSelectedItem(),(String)power_spinner.getSelectedItem(),time.getText().toString());
-                list.add(0,dataset);
-                adapter.notifyDataSetChanged();
+
+                //list.add(0,dataset);
+
                 time.setText(null);
                 allcal.setText(adapter.getAllCalories()+"kcals");
-                // 데이터베이스에도 추가!
+                Cursor cur = database.rawQuery("SELECT * FROM 사용자운동", null);
+                Integer n = cur.getCount() + 1;
+                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리) VALUES ("+n+", '"+dataset.exercise+"', '"+dataset.power+"', "+Integer.parseInt(dataset.time)+", "+ Integer.parseInt(dataset.calories)+")";
+                database.execSQL(sql);
+                list = mDbHelper.getTableData();
+                adapter.notifyDataSetChanged();
 
             }
         }
@@ -352,4 +379,5 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     public void onFinished() {
 
     }
+
 }
