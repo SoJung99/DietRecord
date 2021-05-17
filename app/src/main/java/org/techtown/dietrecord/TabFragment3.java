@@ -12,6 +12,8 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Looper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -72,7 +74,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     Button submit;
     Button voice_submit;
 
-    ExerciseData voice_exer;
+    ExerciseData voice_exer = null;
 
     private SpeechRecognizerClient client;
 
@@ -249,6 +251,38 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             // voice_result 를 다시 초기화해줌
             voice_result.setText("운동구분 / 운동강도 / 운동시간(분)");
             // adapter의 list에도 기록 추가후 notifyDataSetChanged()를 통해 화면에 해당 기록 추가
+
+            if(voice_exer==null){
+                Toast.makeText(getActivity(), "음성인식을 먼저해주세요.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            Cursor cur = database.rawQuery("SELECT * FROM 사용자운동", null);
+            Integer n = cur.getCount() + 1;
+            Cursor c = database.rawQuery("SELECT * FROM 운동정보 WHERE 운동구분='"+voice_exer.exercise+"' AND 운동강도='"+voice_exer.power+"'", null);
+
+            Double a;
+            if(c!=null) {
+                c.moveToFirst();
+                System.out.println(c.getCount());
+                a = Integer.parseInt(voice_exer.time) * c.getDouble(2);
+            }
+            else{
+                Toast.makeText(getActivity(), "음성인식 입력 데이터에 문제가 있습니다.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+
+            String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리) VALUES ("+n+", '"+voice_exer.exercise+"', '"+voice_exer.power+"', "+Integer.parseInt(voice_exer.time)+", "+ a+")";
+            database.execSQL(sql);
+            list = mDbHelper.getTableData();
+
+            adapter = new ExerciseAdapter(list);
+            recyclerView.setAdapter(adapter);
+            adapter.setOnClickListener(this);
+            adapter.notifyDataSetChanged();
+            allcal.setText(adapter.getAllCalories()+"kcals");
         }
         else if(view==info){
             new AlertDialog.Builder(getActivity()).setTitle("운동 입력 정보")
@@ -268,7 +302,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 //list.add(0,dataset);
 
                 time.setText(null);
-                allcal.setText(adapter.getAllCalories()+"kcals");
+                //allcal.setText(adapter.getAllCalories()+"kcals");
                 Cursor cur = database.rawQuery("SELECT * FROM 사용자운동", null);
                 Integer n = cur.getCount() + 1;
                 Cursor c = database.rawQuery("SELECT * FROM 운동정보 WHERE 운동구분='"+dataset.exercise+"' AND 운동강도='"+dataset.power+"'", null);
@@ -277,7 +311,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 c.moveToFirst();
                 System.out.println(c.getCount());
                 Double a = Integer.parseInt(dataset.time)* c.getDouble(2);
-                System.out.println("칼로리 소모 : "+ a);
+
 
 
 
@@ -299,7 +333,16 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
     @Override
     public void onItemClicked(int position) {
-
+        final int p = position;
+        new AlertDialog.Builder(getActivity()).setTitle("기록 삭제")
+                .setMessage("해당 운동 기록을 삭제하시겠습니까?")
+                .setPositiveButton("네",new DialogInterface.OnClickListener(){
+                    public void onClick(DialogInterface dlg, int sumthin){
+                        removeP(p);
+                    }
+                }).setNegativeButton("아니오",new DialogInterface.OnClickListener(){
+            public void onClick(DialogInterface dlg, int sumthin) { }
+        }).show();
     }
 
     public void removeP(int p){
@@ -317,16 +360,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     }
     @Override
     public void onItemLongClicked(int position) {
-        final int p = position;
-        new AlertDialog.Builder(getActivity()).setTitle("기록 삭제")
-                .setMessage("해당 운동 기록을 삭제하시겠습니까?")
-                .setPositiveButton("네",new DialogInterface.OnClickListener(){
-                    public void onClick(DialogInterface dlg, int sumthin){
-                        removeP(p);
-                    }
-                }).setNegativeButton("아니오",new DialogInterface.OnClickListener(){
-            public void onClick(DialogInterface dlg, int sumthin) { }
-        }).show();
+
     }
 
     public void onDestroy() {
@@ -374,6 +408,15 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
     @Override
     public void onError(int errorCode, String errorMsg) {
+        Handler mHandler = new Handler(Looper.getMainLooper());
+        mHandler.postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(getActivity(), "음성인식이 잘못되었습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+                voice.setEnabled(true);
+            }
+        }, 0);
+
 
     }
 
@@ -393,17 +436,75 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
         String str = builder.toString();
 
+
+
         StringTokenizer strToken = new StringTokenizer(str," ");
-        voice_exer = new ExerciseData(strToken.nextToken(),strToken.nextToken(),strToken.nextToken());
+
+        try{
+            voice_exer = new ExerciseData(strToken.nextToken(),strToken.nextToken(),strToken.nextToken());
+        }catch(Exception a){
+            Toast.makeText(getActivity(), "음성인식이 잘못되었습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            voice.setEnabled(true);
+            return;
+        }
 
         voice_exer.setTime(voice_exer.time.substring(0,voice_exer.time.length()-1));
-        /*
-        if(voice_exer.exercise && voice_exer.power in database)
-            flag설정으로 오류 x
-            그렇지 않으면 오류 메시지
-        */
+
+        if(binaryStringSearch(ex_items, voice_exer.exercise) == -1){
+            Toast.makeText(getActivity(), "해당 운동구분은 데이터베이스에 없습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            voice.setEnabled(true);
+            return;
+        }
+        if(binaryStringSearch(power_items, voice_exer.power) == -1){
+            Toast.makeText(getActivity(), "해당 운동강도는 데이터베이스에 없습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            voice.setEnabled(true);
+            return;
+        }
+        if(!isNumber(voice_exer.time)){
+            Toast.makeText(getActivity(), "시간은 숫자여야 합니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            voice.setEnabled(true);
+            return;
+        }
+
         voice_result.setText(new String(voice_exer.exercise+" / "+voice_exer.power+" / "+voice_exer.time));
         voice.setEnabled(true);
+    }
+    static boolean isNumber(String str) {
+        boolean result = true;
+        // null, 공백일시
+        if (str == null || str.length() == 0) {
+            result = false;
+        }
+        // null이나 공백이 아닐시
+        else {
+            for (int i = 0; i < str.length(); i++) {
+                int c = (int) str.charAt(i);
+                // 숫자가 아니라면
+                if (c < 48 || c > 57) {
+                    result = false;
+                }
+            }
+        }
+        return result;
+    }
+    public static int binaryStringSearch(String[] strArr, String str) {
+
+        int low = 0;
+        int high = strArr.length -1;
+        int result = -1;
+
+        while (low <= high) {
+            int mid = (low + high) / 2;
+            if (strArr[mid].equals(str)) {
+                result = mid;
+                return result;
+            }else if (strArr[mid].compareTo(str) < 0) {
+                low = mid + 1;
+            }else {
+                high = mid - 1;
+            }
+        }
+        return result;
     }
 
     @Override
