@@ -10,10 +10,12 @@ import com.kakao.usermgmt.response.model.User;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class DataAdapter
 {
+    Calendar calendar;
     protected static final String TAG = "DataAdapter";
 
     // TODO : TABLE 이름을 명시해야함
@@ -70,8 +72,11 @@ public class DataAdapter
     {
         try
         {
+            calendar = Calendar.getInstance();
+            Integer date =calendar.get(Calendar.YEAR)*10000+(calendar.get(Calendar.MONTH)+1)*100+calendar.get(Calendar.DATE);
+            System.out.println("date : "+date);
             // Table 이름 -> antpool_bitcoin 불러오기
-            String sql ="SELECT * FROM " + TABLE_NAME;
+            String sql ="SELECT * FROM " + TABLE_NAME +" WHERE 날짜="+date;
 
             // 모델 넣을 리스트 생성
             ArrayList<ExerciseData> userList = new ArrayList<>();
