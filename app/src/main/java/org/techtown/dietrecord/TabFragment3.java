@@ -45,6 +45,7 @@ import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
@@ -57,6 +58,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
     ExerciseAdapter adapter = new ExerciseAdapter(list);
     static int i=0;
+    Calendar calendar;  // 날짜 가져오기 위한 캘린더 객체
 
     Spinner ex_spinner, power_spinner;
     EditText time;
@@ -272,10 +274,12 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 return;
             }
 
+            calendar = Calendar.getInstance();
+            Integer date =calendar.get(Calendar.YEAR)*10000+(calendar.get(Calendar.MONTH)+1)*100+calendar.get(Calendar.DATE);
 
-
-            String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리) VALUES ("+n+", '"+voice_exer.exercise+"', '"+voice_exer.power+"', "+Integer.parseInt(voice_exer.time)+", "+ a+")";
+            String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜) VALUES ("+n+", '"+voice_exer.exercise+"', '"+voice_exer.power+"', "+Integer.parseInt(voice_exer.time)+", "+ a+", "+ date+ ")";
             database.execSQL(sql);
+
             list = mDbHelper.getTableData();
 
             adapter = new ExerciseAdapter(list);
@@ -313,9 +317,10 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 Double a = Integer.parseInt(dataset.time)* c.getDouble(2);
 
 
+                calendar = Calendar.getInstance();
+                Integer date =calendar.get(Calendar.YEAR)*10000+(calendar.get(Calendar.MONTH)+1)*100+calendar.get(Calendar.DATE);
 
-
-                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리) VALUES ("+n+", '"+dataset.exercise+"', '"+dataset.power+"', "+Integer.parseInt(dataset.time)+", "+ a+")";
+                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜) VALUES ("+n+", '"+dataset.exercise+"', '"+dataset.power+"', "+Integer.parseInt(dataset.time)+", "+ a+", "+date+")";
                 database.execSQL(sql);
                 list = mDbHelper.getTableData();
 
@@ -347,7 +352,9 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
     public void removeP(int p){
         ExerciseData d = list.get(p);
-        String sql = "DELETE FROM 사용자운동 WHERE 운동구분='"+d.exercise+"' AND 강도='"+d.power+"' AND 시간="+d.time+"";
+        calendar = Calendar.getInstance();
+        Integer date =calendar.get(Calendar.YEAR)*10000+(calendar.get(Calendar.MONTH)+1)*100+calendar.get(Calendar.DATE);
+        String sql = "DELETE FROM 사용자운동 WHERE 운동구분='"+d.exercise+"' AND 강도='"+d.power+"' AND 시간="+d.time+" AND 날짜="+date;
         database.execSQL(sql);
         list = mDbHelper.getTableData();
 

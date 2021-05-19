@@ -5,6 +5,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.res.Resources;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -32,6 +33,24 @@ public class TabFragment1 extends Fragment {
     int Car_entire = 100, Car_present = 25; // 탄수화물
     int Pro_entire = 100, Pro_present = 50; // 단백질
     int Fat_entire = 100, Fat_present = 75; // 지방
+
+    DataAdapter mDbHelper;
+    DataBaseHelper dbHelper;
+    SQLiteDatabase database ;
+
+    public void intitLoadDB(){
+        mDbHelper = new DataAdapter(getActivity().getApplicationContext());
+        mDbHelper.createDatabase();
+        mDbHelper.open();
+
+        dbHelper = new DataBaseHelper(getActivity().getApplicationContext());
+        dbHelper.openDataBase();
+        dbHelper.close();
+        database = dbHelper.getWritableDatabase();
+
+
+        //mDbHelper.close();
+    }
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {

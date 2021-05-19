@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+    
     static class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터
 
 
