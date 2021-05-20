@@ -10,19 +10,87 @@
 
     <string-array name="itemKind">
         <item>(음식 종류)</item>
-        <item>사과</item>
-        <item>귤</item>
-        <item>딸기</item>
-        <item>바나나</item>
-        <item>배</item>
-        <item>토마토</item>
-        <item>수박</item>
-        <item>아몬드</item>
-        <item>밥</item>
-        <item>된장찌개</item>
-        <item>김치찌개</item>
-        <item>나머지 넣기!</item>
-        <item>ㄱㄴㄷ?</item>
+        <item>물 (컵)</item>
+        <item>갈비탕 (인분)</item>
+        <item>갈치구이 (인분)</item>
+        <item>감자샐러드 (인분)</item>
+        <item>고등어구이 (인분)</item>
+        <item>곤약 (인분)</item>
+        <item>군고구마 (개)</item>
+        <item>군만두 (개)</item>
+        <item>귤 (개)</item>
+        <item>김치볶음 (인분)</item>
+        <item>김치전 (인분)</item>
+        <item>김치찌개 (인분)</item>
+        <item>깍두기 (인분)</item>
+        <item>다시마 (인분)</item>
+        <item>달걀프라이 (개)</item>
+        <item>닭가슴살 (인분)</item>
+        <item>당근 (개)</item>
+        <item>도넛 (개)</item>
+        <item>돼지불고기 (인분)</item>
+        <item>된장찌개 (인분)</item>
+        <item>두부 (개)</item>
+        <item>딸기 (개)</item>
+        <item>떡국 (인분)</item>
+        <item>떡볶이 (인분)</item>
+        <item>라면 (개)</item>
+        <item>멸치볶음 (인분)</item>
+        <item>물냉면 (인분)</item>
+        <item>바게트 (인분)</item>
+        <item>바나나 (개)</item>
+        <item>밥 (인분)</item>
+        <item>배 (개)</item>
+        <item>배추김치 (인분)</item>
+        <item>백김치 (인분)</item>
+        <item>백설기 (인분)</item>
+        <item>베이글 (개)</item>
+        <item>북어국 (인분)</item>
+        <item>브로콜리 (인분)</item>
+        <item>비빔냉면 (인분)</item>
+        <item>사과 (개)</item>
+        <item>삶은감자 (개)</item>
+        <item>삶은달걀 (개)</item>
+        <item>삼계탕 (인분)</item>
+        <item>샐러리 (인분)</item>
+        <item>생크림케이크 (조각)</item>
+        <item>설렁탕 (인분)</item>
+        <item>소갈비찜 (인분)</item>
+        <item>소고기등심 (인분)</item>
+        <item>수박 (조각)</item>
+        <item>스파게티 (인분)</item>
+        <item>시금치나물 (인분)</item>
+        <item>시리얼 (인분)</item>
+        <item>식빵 (조각)</item>
+        <item>아몬드 (개)</item>
+        <item>아보카도 (개)</item>
+        <item>야채죽 (인분)</item>
+        <item>양배추찜 (인분)</item>
+        <item>양상추 (인분)</item>
+        <item>연어 (인분)</item>
+        <item>오이 (개)</item>
+        <item>요거트 (인분)</item>
+        <item>우동 (인분)</item>
+        <item>잡채 (인분)</item>
+        <item>장조림 (인분)</item>
+        <item>짜장면 (인분)</item>
+        <item>짬뽕 (인분)</item>
+        <item>찐단호박 (인분)</item>
+        <item>초콜릿케이크 (조각)</item>
+        <item>치즈버거 (개)</item>
+        <item>치킨 (조각)</item>
+        <item>치킨샐러드 (인분)</item>
+        <item>칼국수 (인분)</item>
+        <item>콘샐러드 (인분)</item>
+        <item>콩나물국 (인분)</item>
+        <item>탕수육 (인분)</item>
+        <item>토마토 (개)</item>
+        <item>파전 (인분)</item>
+        <item>파프리카 (개)</item>
+        <item>햄버거 (개)</item>
+        <item>호밀빵 (인분)</item>
+
+
     </string-array>
 
     <string-array name="itemAmount">
@@ -33,7 +101,20 @@
         <item>2</item>
         <item>2.5</item>
         <item>3</item>
-        <item>어디까지?</item>
+        <item>3.5</item>
+        <item>4</item>
+        <item>4.5</item>
+        <item>5</item>
+        <item>5.5</item>
+        <item>6</item>
+        <item>6.5</item>
+        <item>7</item>
+        <item>7.5</item>
+        <item>8</item>
+        <item>8.5</item>
+        <item>9</item>
+        <item>9.5</item>
+        <item>10</item>
     </string-array>
 
 </resources>
