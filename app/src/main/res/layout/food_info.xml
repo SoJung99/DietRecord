@@ -31,41 +31,46 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="구분"
-                            android:textColor="#000000"
+                            android:textColor="#FFFFFF"
                             android:textSize="18sp" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="기준"
-                            android:textColor="#000000"
+                            android:textColor="#FFFFFF"
                             android:textSize="18sp" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="end"
                             android:text="칼로리(kcal)"
-                            android:gravity="end"
-                            android:textColor="#000000"
+                            android:textColor="#FFFFFF"
                             android:textSize="15sp" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="end"
                             android:text="탄수화물(g)"
-                            android:gravity="end"
-                            android:textColor="#000000"
+                            android:textColor="#FFFFFF"
                             android:textSize="15sp" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:gravity="end"
                             android:text="단백질(g)"
-                            android:gravity="end"
-                            android:textColor="#000000"
+                            android:textColor="#FFFFFF"
                             android:textSize="15sp" />
+
                         <TextView
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="지방(g)"
                             android:gravity="end"
-                            android:textColor="#000000"
+                            android:text="지방(g)"
+                            android:textColor="#FFFFFF"
                             android:textSize="15sp" />
                     </TableRow>
                     <TableRow
@@ -76,7 +81,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="물"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -120,7 +125,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="갈비탕"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -164,7 +169,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="갈치구이"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -208,7 +213,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="감자샐러드"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -252,7 +257,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="고등어구이"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -296,7 +301,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="곤약"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -340,7 +345,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="군고구마"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -384,7 +389,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="군만두"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -428,7 +433,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="귤"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -473,7 +478,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="김치볶음"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -517,7 +522,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="김치전"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -561,7 +566,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="김치찌개"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -605,7 +610,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="깍두기"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -649,7 +654,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="다시마"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -693,7 +698,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="달걀프라이"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -737,7 +742,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="닭가슴살"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -781,7 +786,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="당근"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -825,7 +830,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="도넛"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -869,7 +874,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="돼지불고기"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -914,7 +919,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="된장찌개"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -958,7 +963,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="두부"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1002,7 +1007,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="딸기"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1046,7 +1051,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="떡국"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1090,7 +1095,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="떡볶이"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1134,7 +1139,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="라면"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1178,7 +1183,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="멸치볶음"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1222,7 +1227,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="물냉면"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1266,7 +1271,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="바게트"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1310,7 +1315,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="바나나"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1355,7 +1360,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="밥"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1399,7 +1404,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="배"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1443,7 +1448,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="배추김치"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1487,7 +1492,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="백김치"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1531,7 +1536,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="백설기"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1575,7 +1580,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="베이글"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1619,7 +1624,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="북어국"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1663,7 +1668,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="브로콜리"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1707,7 +1712,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="비빔냉면"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1751,7 +1756,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="사과"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1796,7 +1801,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="삶은감자"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1840,7 +1845,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="삶은달걀"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1884,7 +1889,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="삼계탕"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1928,7 +1933,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="샐러리"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -1972,7 +1977,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="생크림케이크"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2016,7 +2021,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="설렁탕"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2060,7 +2065,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="소갈비찜"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2104,7 +2109,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="소고기등심"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2148,7 +2153,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="수박"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2192,7 +2197,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="스파게티"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2237,7 +2242,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="시금치나물"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2281,7 +2286,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="시리얼"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2325,7 +2330,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="식빵"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2369,7 +2374,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="아몬드"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2413,7 +2418,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="아보카도"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2457,7 +2462,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="야채죽"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2501,7 +2506,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="양배추찜"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2545,7 +2550,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="양상추"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2589,7 +2594,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="연어"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2633,7 +2638,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="오이"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2678,7 +2683,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="요거트"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2722,7 +2727,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="우동"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2766,7 +2771,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="잡채"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2810,7 +2815,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="장조림"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2854,7 +2859,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="짜장면"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2898,7 +2903,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="짬뽕"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2942,7 +2947,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="찐단호박"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -2986,7 +2991,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="초콜릿케이크"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3030,7 +3035,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="치즈버거"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3074,7 +3079,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="치킨"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3119,7 +3124,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="치킨샐러드"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3163,7 +3168,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="칼국수"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3207,7 +3212,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="콘샐러드"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3251,7 +3256,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="콩나물국"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3295,7 +3300,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="탕수육"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3339,7 +3344,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="토마토"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3383,7 +3388,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="파전"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3427,7 +3432,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="파프리카"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3471,7 +3476,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="햄버거"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
@@ -3516,7 +3521,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:text="호밀빵"
-                            android:textColor="#000000" />
+                            android:textColor="#FFFFFF" />
 
                         <TextView
                             android:layout_width="match_parent"
