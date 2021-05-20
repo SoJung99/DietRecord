@@ -52,7 +52,7 @@ import java.util.StringTokenizer;
 
 public class TabFragment3 extends Fragment implements View.OnClickListener, ExerciseAdapter.ExerciseViewClickListener, SpeechRecognizeListener {
 
-
+    //운동창
     Context context;
     ArrayList<ExerciseData> list;
 
