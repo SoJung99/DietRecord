@@ -1,0 +1,44 @@
+Index: app/src/main/res/layout/fragment3.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"utf-8\"?>\r\n<androidx.constraintlayout.widget.ConstraintLayout\r\n    xmlns:android=\"http://schemas.android.com/apk/res/android\" android:layout_width=\"match_parent\"\r\n    android:layout_height=\"match_parent\">\r\n\r\n</androidx.constraintlayout.widget.ConstraintLayout>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+--- app/src/main/res/layout/fragment3.xml	(revision 54944dd0c50fd3103f8f1601ff5608c4486b5796)
++++ app/src/main/res/layout/fragment3.xml	(date 1620573044164)
+@@ -1,6 +1,30 @@
+ <?xml version="1.0" encoding="utf-8"?>
+-<androidx.constraintlayout.widget.ConstraintLayout
+-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+-    android:layout_height="match_parent">
++<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
++    xmlns:app="http://schemas.android.com/apk/res-auto"
++    xmlns:tools="http://schemas.android.com/tools"
++    android:layout_width="match_parent"
++    android:layout_height="match_parent"
++    android:orientation="vertical"
++    tools:context=".MainActivity">
++
++    <androidx.viewpager.widget.ViewPager
++        android:id="@+id/main_viewPager"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:layout_constraintTop_toTopOf="parent" />
+ 
++    <com.google.android.material.tabs.TabLayout
++        android:id="@+id/main_tablayout"
++        android:layout_width="match_parent"
++        android:layout_height="wrap_content"
++        app:layout_constraintBottom_toBottomOf="parent"
++        app:layout_constraintEnd_toEndOf="parent"
++        app:layout_constraintStart_toStartOf="parent"
++        app:tabGravity="fill"
++        app:tabIndicatorColor="@color/colorPrimary"
++        app:tabMode="fixed">
++
++    </com.google.android.material.tabs.TabLayout>
+ </androidx.constraintlayout.widget.ConstraintLayout>
+\ No newline at end of file
