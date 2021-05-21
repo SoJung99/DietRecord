@@ -9,13 +9,13 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="231dp">
+        android:layout_height="262dp">
 
         <View
             android:id="@+id/view3"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:layout_marginTop="88dp"
+            android:layout_marginTop="120dp"
             android:background="#c2c2d6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -38,11 +38,11 @@
 
         <Button
             android:id="@+id/voice_bt"
-            android:layout_width="45dp"
-            android:layout_height="39dp"
+            android:layout_width="78dp"
+            android:layout_height="42dp"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginTop="64dp"
             android:background="#c2c2d6"
             android:text="음성인식"
             app:layout_constraintStart_toStartOf="parent"
@@ -52,9 +52,9 @@
             android:id="@+id/power_spinner"
             android:layout_width="99dp"
             android:layout_height="47dp"
-            android:layout_marginTop="104dp"
+            android:layout_marginTop="136dp"
             app:layout_constraintEnd_toStartOf="@+id/time_input"
-            app:layout_constraintHorizontal_bias="0.466"
+            app:layout_constraintHorizontal_bias="0.4"
             app:layout_constraintStart_toEndOf="@+id/exer_spinner"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -64,7 +64,7 @@
             android:layout_height="44dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
-            android:layout_marginTop="104dp"
+            android:layout_marginTop="136dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -72,9 +72,9 @@
             android:id="@+id/time_input"
             android:layout_width="65dp"
             android:layout_height="47dp"
-            android:layout_marginTop="104dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginTop="136dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:digits="0123456789"
             android:hint="시간(분)"
             android:imeOptions="actionDone"
@@ -87,39 +87,37 @@
             android:id="@+id/submit_bt"
             android:layout_width="50dp"
             android:layout_height="42dp"
-            android:layout_marginTop="104dp"
-            android:layout_marginEnd="12dp"
-            android:layout_marginRight="12dp"
+            android:layout_marginTop="140dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
             android:background="#c2c2d6"
             android:text="기록"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
+
         <Button
             android:id="@+id/exercise_info"
-            android:layout_width="61dp"
-            android:layout_height="39dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="16dp"
-            android:layout_marginRight="16dp"
+            android:layout_width="94dp"
+            android:layout_height="28dp"
+            android:layout_marginTop="24dp"
             android:background="#c2c2d6"
             android:text="운동 정보"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="1.0"
-            app:layout_constraintStart_toEndOf="@+id/voice_bt"
+            app:layout_constraintHorizontal_bias="0.936"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <View
             android:id="@+id/view"
             android:layout_width="wrap_content"
             android:layout_height="2dp"
-            android:layout_marginTop="172dp"
+            android:layout_marginTop="200dp"
             android:background="#c2c2d6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
-
 
         <TextView
             android:id="@+id/today_exer"
@@ -127,20 +125,21 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:layout_marginTop="188dp"
             android:text="총 소모 칼로리"
             android:textSize="18sp"
             android:textStyle="bold"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.907" />
 
         <TextView
             android:id="@+id/voice_result"
-            android:layout_width="213dp"
+            android:layout_width="228dp"
             android:layout_height="37dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginLeft="8dp"
-            android:layout_marginTop="28dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginLeft="20dp"
+            android:layout_marginTop="68dp"
             android:text="운동 종류 / 강도 / 시간"
             app:layout_constraintStart_toEndOf="@+id/voice_bt"
             app:layout_constraintTop_toTopOf="parent" />
@@ -149,12 +148,25 @@
             android:id="@+id/voice_submit"
             android:layout_width="39dp"
             android:layout_height="39dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginEnd="4dp"
-            android:layout_marginRight="4dp"
+            android:layout_marginTop="68dp"
+            android:layout_marginEnd="12dp"
+            android:layout_marginRight="12dp"
             android:background="#c2c2d6"
             android:text="기록"
-            app:layout_constraintEnd_toStartOf="@+id/exercise_info"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/voice_result"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+            android:id="@+id/voice_info"
+            android:layout_width="154dp"
+            android:layout_height="29dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginTop="24dp"
+            android:background="#c2c2d6"
+            android:text="음성인식 예시 보기"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>

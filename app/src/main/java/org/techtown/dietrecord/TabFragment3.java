@@ -50,6 +50,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
 
+import static android.content.Context.LAYOUT_INFLATER_SERVICE;
+
 public class TabFragment3 extends Fragment implements View.OnClickListener, ExerciseAdapter.ExerciseViewClickListener, SpeechRecognizeListener {
 
     //운동창
@@ -75,6 +77,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     Button info;
     Button submit;
     Button voice_submit;
+    Button voice_info;
 
     ExerciseData voice_exer = null;
 
@@ -134,6 +137,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         allcal = (TextView)v.findViewById(R.id.cal);
         voice_submit = (Button)v.findViewById(R.id.voice_submit);
         voice_result = (TextView)v.findViewById(R.id.voice_result);
+        voice_info = (Button)v.findViewById(R.id.voice_info);
 
         voice.setOnClickListener(this);
         info.setOnClickListener(this);
@@ -248,6 +252,13 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
             voice.setEnabled(false);
         }
+        else if(view==voice_info){
+            new AlertDialog.Builder(getActivity()).setTitle("음성 인식 예시")
+                    .setMessage("※ '운동종류_강도_시간(분)' 순으로 말해주세요.\n※ 운동별 칼로리는 '운동 정보 보기' 버튼을 눌러 참고하세요.\n예) 걷기 상 10분\n예) 윗몸일으키기 중 25분")
+                    .setNeutralButton("확인",new DialogInterface.OnClickListener(){
+                        public void onClick(DialogInterface dlg, int sumthin){}
+                    }).show();
+        }
         else if(view==voice_submit){
             // 데이터베이스에 해당 운동 기록 저장
             // voice_result 를 다시 초기화해줌
@@ -289,8 +300,9 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             allcal.setText(adapter.getAllCalories()+"kcals");
         }
         else if(view==info){
+            LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
             new AlertDialog.Builder(getActivity()).setTitle("운동 입력 정보")
-                    .setMessage("운동종류 강도 시간(분) 으로 말해주세요. 강도는 상 중 하. 시간은 30분과 같은 방법으로 말해주세요.")
+                    .setView(inflater.inflate(R.layout.exercise_info, (ViewGroup)view.findViewById(R.id.exerciseInfo)))
                     .setNeutralButton("확인",new DialogInterface.OnClickListener(){
                         public void onClick(DialogInterface dlg, int sumthin){}
                     }).show();

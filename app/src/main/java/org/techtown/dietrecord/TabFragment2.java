@@ -13,13 +13,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -27,7 +25,6 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -344,7 +341,7 @@ public class TabFragment2 extends Fragment {
                 LayoutInflater inflater = (LayoutInflater) mContext.getSystemService(LAYOUT_INFLATER_SERVICE);
                 new AlertDialog.Builder(getActivity())
                         .setTitle("음식별 정보")
-                        .setView(inflater.inflate(R.layout.food_info, (ViewGroup)v.findViewById(R.id.foodInfo)))
+                        .setView(inflater.inflate(R.layout.food_info, (ViewGroup)v.findViewById(R.id.exerciseInfo)))
                         //.setMessage("내용 넣기")
                         .setNeutralButton("확인", new DialogInterface.OnClickListener() {
                             @Override
