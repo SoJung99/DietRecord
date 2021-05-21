@@ -59,6 +59,8 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
     String voice_food_amount = "(양)";     // 음성인식 음식 양
     String voice_food_unit = null;          // 단위
     Cursor voice_cursor = null;
+    String food2;
+    String[] item_kind;
 
     ArrayList<UserFood> LIST = new ArrayList<>();
     ArrayList<UserFood> LIST2 = new ArrayList<>();
@@ -111,6 +113,8 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
 
         View v = inflater.inflate(R.layout.fragment2, container, false);
         new MyApplication();
+
+        item_kind = getResources().getStringArray(R.array.itemKind);
 
         btnVoice = (Button)v.findViewById(R.id.btn_voice);
         btnVoice.setOnClickListener(this);
@@ -420,7 +424,8 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                             "저녁 다시마\n저녁 달걀프라이\n저녁 닭가슴살\n저녁 당근\n저녁 도넛\n저녁 돼지불고기\n저녁 된장찌개\n저녁 두부\n저녁 딸기\n저녁 떡국\n저녁 떡볶이\n저녁 라면\n저녁 멸치볶음\n저녁 물냉면\n저녁 바게트\n저녁 바나나\n저녁 밥\n저녁 배\n저녁 배추김치\n저녁 백김치\n저녁 백설기\n저녁 베이글\n저녁 북어국\n저녁 브로콜리\n저녁 비빔냉면\n"+
                             "저녁 사과\n저녁 삶은감자\n저녁 삶은달걀\n저녁 삼계탕\n저녁 샐러리\n저녁 생크림케이크\n저녁 설렁탕\n저녁 소갈비찜\n저녁 소고기등심\n저녁 수박\n저녁 스파게티\n저녁 시금치나물\n저녁 시리얼\n저녁 식빵\n저녁 아몬드\n저녁 아보카도\n저녁 야채죽\n저녁 양배추찜\n저녁 양상추\n저녁 연어\n저녁 오이\n저녁 요거트\n저녁 우동\n"+
                             "저녁 잡채\n저녁 장조림\n저녁 짜장면\n저녁 짬뽕\n저녁 찐단호박\n저녁 초콜릿케이크\n저녁 치즈버거\n저녁 치킨\n저녁 치킨샐러드\n저녁 칼국수\n저녁 콘샐러드\n저녁 콩나물국\n저녁 탕수육\n저녁 토마토\n저녁 파전\n저녁 파프리카\n저녁 햄버거\n저녁 호밀빵\n"+
-                            "컵\n개\n조각\n인분\n"
+                            "컵\n개\n조각\n인분\n"+
+                            "저녁 북어국 3인분"
                             //"0.5컵\n 1컵\n 1.5컵\n 2컵\n 2.5컵\n 3컵\n 3.5컵\n 4컵\n 4.5컵\n 5컵\n 5.5컵\n 6컵\n 6.5컵\n 7컵\n 7.5컵\n 8컵\n 8.5컵\n 9컵\n 9.5컵\n 10컵\n"+
                             //"0.5개\n 1개\n 1.5개\n 2개\n 2.5개\n 3개\n 3.5개\n 4개\n 4.5개\n 5개\n 5.5개\n 6개\n 6.5개\n 7개\n 7.5개\n 8개\n 8.5개\n 9개\n 9.5개\n 10개\n"+
                             //"0.5조각\n 1조각\n 1.5조각\n 2조각\n 2.5조각\n 3조각\n 3.5조각\n 4조각\n 4.5조각\n 5조각\n 5.5조각\n 6조각\n 6.5조각\n 7조각\n 7.5조각\n 8조각\n 8.5조각\n 9조각\n 9.5조각\n 10조각\n"+
@@ -492,19 +497,24 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         builder.append(texts.get(0));
         String str = builder.toString();
         StringTokenizer strToken = new StringTokenizer(str," ");
-        String string = str.replace(" ","/");////////////////////////////////////////////////////////////////
+        String string = str.replace(" ","_");////////////////////////////////////////////////////////////////
         try{
             voice_food_time = strToken.nextToken();
             voice_food_kind = strToken.nextToken();
             voice_food_amount = strToken.nextToken();
-            Toast.makeText(getActivity(), "/"+string+"/", Toast.LENGTH_SHORT).show();/////////////
-            //Toast.makeText(getActivity(), "/"+voice_food_time + "/" +voice_food_kind +"/" + voice_food_amount+"/", Toast.LENGTH_SHORT).show();/////////////
+            for(int i=0; strToken.hasMoreElements(); i++){
+                voice_food_amount = voice_food_amount + strToken.nextToken();
+            }
+            if(voice_food_kind.equals("북엇국")){ voice_food_kind = "북어국"; }
+            food2 = voice_food_amount;
             voice_food_amount = voice_food_amount.replace("반","0.5");
             voice_food_amount = voice_food_amount.replace("한","1");
             voice_food_amount = voice_food_amount.replace("두","2");
             voice_food_amount = voice_food_amount.replace("세","3");
             voice_food_amount = voice_food_amount.replaceAll("[^0123456789.]","");
-            //Toast.makeText(getActivity(), "/"+voice_food_amount+"/", Toast.LENGTH_SHORT).show();///////////////////////////////////
+
+            Toast.makeText(getActivity(), "/"+string+"/"+"\n/"+voice_food_time + "/" +voice_food_kind +"/" + voice_food_amount+"/"
+                    +"\n" + getFood(voice_food_kind, food2), Toast.LENGTH_SHORT).show();// 전체 \n (식사)(종류)(양) \n 추정 종류 //지우기//
         }catch(Exception a){
             Toast.makeText(getActivity(), "Exception)\n음성인식이 잘못되었습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
             voiceReset();
@@ -512,13 +522,13 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
             return;
         }
         if(!voice_food_time.equals("아침") && !voice_food_time.equals("점심") && !voice_food_time.equals("저녁")){
-            Toast.makeText(getActivity(), "식사는 아침, 점심, 저녁 중에서 선택하여 말해주세요.", Toast.LENGTH_SHORT).show();//////////////////////////////
+            Toast.makeText(getActivity(), "식사는 아침, 점심, 저녁 중에서 선택하여 말해주세요.", Toast.LENGTH_SHORT).show();//
             voiceReset();
             btnVoice.setEnabled(true);
             return;
         }
-        else if(!isNumber(voice_food_amount)){
-            Toast.makeText(getActivity(), "음식의 양을 다시 말해주세요.", Toast.LENGTH_SHORT).show();///////////////////////////////////
+        else if(voice_food_amount.length() == 0){
+            Toast.makeText(getActivity(), "음식의 양을 다시 말해주세요.", Toast.LENGTH_SHORT).show();//
             voiceReset();
             btnVoice.setEnabled(true);
             return;
@@ -526,10 +536,14 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         else {
             voice_cursor = database.rawQuery("SELECT * FROM 음식정보 WHERE 음식구분='"+voice_food_kind+"'", null);
             if(voice_cursor==null){
-                Toast.makeText(getActivity(), "목록상에 없는 음식입니다!", Toast.LENGTH_SHORT).show();
-                voiceReset();
-                btnVoice.setEnabled(true);
-                return;
+                String strKind = getFood(voice_food_kind, food2);
+                if(strKind == null) {
+                    Toast.makeText(getActivity(), "목록상에 없는 음식입니다!", Toast.LENGTH_SHORT).show();
+                    voiceReset();
+                    btnVoice.setEnabled(true);
+                    return;
+                }
+                else voice_food_kind = strKind;
             }
             else {
                 voice_cursor.moveToFirst();
@@ -540,25 +554,6 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         }
 
     }
-    static boolean isNumber(String str) {
-        boolean result = true;
-        // null, 공백일시
-        if (str == null || str.length() == 0) {
-            result = false;
-        }
-        // null이나 공백이 아닐시
-        else {
-            for (int i = 0; i < str.length(); i++) {
-                int c = (int) str.charAt(i);
-                if(c==46) continue;// 점(.)은 46
-                // 숫자가 아니라면
-                if (c < 48 || c > 57) {
-                    result = false;
-                }
-            }
-        }
-        return result;
-    }
 
     public void voiceReset(){
         voice_food_time = "(식사)";
@@ -568,6 +563,39 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         voice_cursor = null;
     }
 
+    public String getFood(String food, String food2){
+        String result = null;
+        for(int i=1; i<item_kind.length; i++){
+            if( food.charAt(0) != item_kind[i].charAt(0)) {
+                continue;
+            }
+            if(food.length() == 1){
+                String str = new StringTokenizer(item_kind[i]," ").nextToken();
+                if(str.length()==1 || food2.charAt(0) == item_kind[i].charAt(1)){
+                    result = str;
+                    break;
+                }
+                else continue;
+            }
+            if(food.charAt(1) == item_kind[i].charAt(1)){
+                //StringTokenizer strToken = new StringTokenizer(item_kind[i]," ");
+                String str = new StringTokenizer(item_kind[i]," ").nextToken();
+                if(str.equals("김치볶음")||str.equals("김치전")||str.equals("김치찌개")||str.equals("삶은감자")||str.equals("삶은달걀")||str.equals("치킨샐러드")){
+                    if(food2.charAt(0) == item_kind[i].charAt(2)){
+                        result = str;
+                        break;
+                    }
+                    else break;
+                }
+                else {
+                    result = str;
+                    break;
+                }
+            }
+        }
+        //String str = new StringTokenizer(result," ").nextToken();
+        return result;
+    }
 
     public int getDate(){
         Calendar cal = Calendar.getInstance();
