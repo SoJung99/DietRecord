@@ -99,11 +99,11 @@
 
         <Button
             android:id="@+id/exercise_info"
-            android:layout_width="94dp"
-            android:layout_height="28dp"
+            android:layout_width="108dp"
+            android:layout_height="26dp"
             android:layout_marginTop="24dp"
             android:background="#c2c2d6"
-            android:text="운동 정보"
+            android:text="운동 정보 보기"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.949"
             app:layout_constraintStart_toStartOf="parent"
@@ -126,7 +126,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginLeft="16dp"
-            android:text="총 소모 칼로리"
+            android:text="오늘 소모 칼로리"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="parent"

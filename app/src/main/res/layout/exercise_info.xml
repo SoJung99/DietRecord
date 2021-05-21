@@ -45,7 +45,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="end"
-                        android:text="칼로리(kcal)"
+                        android:text="1분당 칼로리(kcal)"
                         android:textColor="#FFFFFF"
                         android:textSize="15sp" />
                 </TableRow>
