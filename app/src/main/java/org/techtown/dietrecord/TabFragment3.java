@@ -143,6 +143,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         info.setOnClickListener(this);
         submit.setOnClickListener(this);
         voice_submit.setOnClickListener(this);
+        voice_info.setOnClickListener(this);
 
 
         ex_spinner = v.findViewById(R.id.exer_spinner);
@@ -470,7 +471,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         voice_exer.setTime(voice_exer.time.substring(0,voice_exer.time.length()-1));
 
         if(binaryStringSearch(ex_items, voice_exer.exercise) == -1){
-            Toast.makeText(getActivity(), "해당 운동구분은 데이터베이스에 없습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), voice_exer.exercise+" 해당 운동구분은 데이터베이스에 없습니다. 다시 시도해주세요.", Toast.LENGTH_SHORT).show();
             voice.setEnabled(true);
             return;
         }
@@ -508,20 +509,11 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     }
     public static int binaryStringSearch(String[] strArr, String str) {
 
-        int low = 0;
-        int high = strArr.length -1;
         int result = -1;
 
-        while (low <= high) {
-            int mid = (low + high) / 2;
-            if (strArr[mid].equals(str)) {
-                result = mid;
-                return result;
-            }else if (strArr[mid].compareTo(str) < 0) {
-                low = mid + 1;
-            }else {
-                high = mid - 1;
-            }
+        for(int i=0; i<strArr.length-1;i++){
+            if(str.matches(strArr[i]))
+                return i;
         }
         return result;
     }

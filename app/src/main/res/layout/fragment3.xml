@@ -54,14 +54,14 @@
             android:layout_height="47dp"
             android:layout_marginTop="136dp"
             app:layout_constraintEnd_toStartOf="@+id/time_input"
-            app:layout_constraintHorizontal_bias="0.4"
+            app:layout_constraintHorizontal_bias="0.459"
             app:layout_constraintStart_toEndOf="@+id/exer_spinner"
             app:layout_constraintTop_toTopOf="parent" />
 
         <Spinner
             android:id="@+id/exer_spinner"
-            android:layout_width="115dp"
-            android:layout_height="44dp"
+            android:layout_width="131dp"
+            android:layout_height="42dp"
             android:layout_marginStart="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginTop="136dp"
@@ -85,13 +85,14 @@
 
         <Button
             android:id="@+id/submit_bt"
-            android:layout_width="50dp"
-            android:layout_height="42dp"
+            android:layout_width="39dp"
+            android:layout_height="40dp"
             android:layout_marginTop="140dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
             android:background="#c2c2d6"
-            android:text="기록"
+            android:text="+"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -104,7 +105,7 @@
             android:background="#c2c2d6"
             android:text="운동 정보"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.936"
+            app:layout_constraintHorizontal_bias="0.949"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -152,8 +153,10 @@
             android:layout_marginEnd="12dp"
             android:layout_marginRight="12dp"
             android:background="#c2c2d6"
-            android:text="기록"
+            android:text="+"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.777"
             app:layout_constraintStart_toEndOf="@+id/voice_result"
             app:layout_constraintTop_toTopOf="parent" />
 
