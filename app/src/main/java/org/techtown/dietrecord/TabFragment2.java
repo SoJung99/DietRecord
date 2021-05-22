@@ -39,6 +39,7 @@ import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
 import com.kakao.sdk.newtoneapi.SpeechRecognizeListener;
 import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -353,7 +354,8 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
             public void onClick(View v) {
                 new AlertDialog.Builder(getActivity())
                         .setTitle("음성인식 예시")
-                        .setMessage("※ '식사_음식 종류_양(컵/개/인분/조각)' 순으로 말해주세요.\n※ 음식별 단위는 '음식별 정보 보기' 버튼을 눌러 참고하세요.\n\n예) 저녁 떡볶이 1인분\n예) 아침 사과 1개\n예) 점심 고등어구이 1.5")
+                        .setMessage("※ '식사_음식 종류_양(컵/개/인분/조각)' 순으로 말해주세요.\n※ 음식별 단위는 '음식별 정보 보기' 버튼을 눌러 참고하세요.\n\n예) 저녁 떡볶이 1인분" +
+                                "\n예) 아침 아몬드 20\n예) 아침 사과 1개\n예) 점심 고등어구이 1.5")
                         .setNeutralButton("확인", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) { }})
@@ -409,28 +411,21 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
     @Override
     public void onClick(View view) {
         String serviceType = SpeechRecognizerClient.SERVICE_TYPE_WORD;
+        //String serviceType = SpeechRecognizerClient.SERVICE_TYPE_DICTATION;
         if (view == btnVoice) {
             SpeechRecognizerClient.Builder builder = new SpeechRecognizerClient.Builder().
                     setServiceType(serviceType).
-                    setUserDictionary("아침 물\n아침 갈비탕\n아침 갈치구이\n아침 감자샐러드\n아침 고등어구이\n아침 곤약\n아침 군고구마\n아침 군만두\n아침 귤\n아침 김치볶음\n아침 김치전\n아침 김치찌개\n아침 깍두기\n"+
-                            "아침 다시마\n아침 달걀프라이\n아침 닭가슴살\n아침 당근\n아침 도넛\n아침 돼지불고기\n아침 된장찌개\n아침 두부\n아침 딸기\n아침 떡국\n아침 떡볶이\n아침 라면\n아침 멸치볶음\n아침 물냉면\n아침 바게트\n아침 바나나\n아침 밥\n아침 배\n아침 배추김치\n아침 백김치\n아침 백설기\n아침 베이글\n아침 북어국\n아침 브로콜리\n아침 비빔냉면\n"+
-                            "아침 사과\n아침 삶은감자\n아침 삶은달걀\n아침 삼계탕\n아침 샐러리\n아침 생크림케이크\n아침 설렁탕\n아침 소갈비찜\n아침 소고기등심\n아침 수박\n아침 스파게티\n아침 시금치나물\n아침 시리얼\n아침 식빵\n아침 아몬드\n아침 아보카도\n아침 야채죽\n아침 양배추찜\n아침 양상추\n아침 연어\n아침 오이\n아침 요거트\n아침 우동\n"+
-                            "아침 잡채\n아침 장조림\n아침 짜장면\n아침 짬뽕\n아침 찐단호박\n아침 초콜릿케이크\n아침 치즈버거\n아침 치킨\n아침 치킨샐러드\n아침 칼국수\n아침 콘샐러드\n아침 콩나물국\n아침 탕수육\n아침 토마토\n아침 파전\n아침 파프리카\n아침 햄버거\n아침 호밀빵\n"+
-                            "점심 물\n점심 갈비탕\n점심 갈치구이\n점심 감자샐러드\n점심 고등어구이\n점심 곤약\n점심 군고구마\n점심 군만두\n점심 귤\n점심 김치볶음\n점심 김치전\n점심 김치찌개\n점심 깍두기\n"+
-                            "점심 다시마\n점심 달걀프라이\n점심 닭가슴살\n점심 당근\n점심 도넛\n점심 돼지불고기\n점심 된장찌개\n점심 두부\n점심 딸기\n점심 떡국\n점심 떡볶이\n점심 라면\n점심 멸치볶음\n점심 물냉면\n점심 바게트\n점심 바나나\n점심 밥\n점심 배\n점심 배추김치\n점심 백김치\n점심 백설기\n점심 베이글\n점심 북어국\n점심 브로콜리\n점심 비빔냉면\n"+
-                            "점심 사과\n점심 삶은감자\n점심 삶은달걀\n점심 삼계탕\n점심 샐러리\n점심 생크림케이크\n점심 설렁탕\n점심 소갈비찜\n점심 소고기등심\n점심 수박\n점심 스파게티\n점심 시금치나물\n점심 시리얼\n점심 식빵\n점심 아몬드\n점심 아보카도\n점심 야채죽\n점심 양배추찜\n점심 양상추\n점심 연어\n점심 오이\n점심 요거트\n점심 우동\n"+
-                            "점심 잡채\n점심 장조림\n점심 짜장면\n점심 짬뽕\n점심 찐단호박\n점심 초콜릿케이크\n점심 치즈버거\n점심 치킨\n점심 치킨샐러드\n점심 칼국수\n점심 콘샐러드\n점심 콩나물국\n점심 탕수육\n점심 토마토\n점심 파전\n점심 파프리카\n점심 햄버거\n점심 호밀빵\n"+
-                            "저녁 물\n저녁 갈비탕\n저녁 갈치구이\n저녁 감자샐러드\n저녁 고등어구이\n저녁 곤약\n저녁 군고구마\n저녁 군만두\n저녁 귤\n저녁 김치볶음\n저녁 김치전\n저녁 김치찌개\n저녁 깍두기\n"+
-                            "저녁 다시마\n저녁 달걀프라이\n저녁 닭가슴살\n저녁 당근\n저녁 도넛\n저녁 돼지불고기\n저녁 된장찌개\n저녁 두부\n저녁 딸기\n저녁 떡국\n저녁 떡볶이\n저녁 라면\n저녁 멸치볶음\n저녁 물냉면\n저녁 바게트\n저녁 바나나\n저녁 밥\n저녁 배\n저녁 배추김치\n저녁 백김치\n저녁 백설기\n저녁 베이글\n저녁 북어국\n저녁 브로콜리\n저녁 비빔냉면\n"+
-                            "저녁 사과\n저녁 삶은감자\n저녁 삶은달걀\n저녁 삼계탕\n저녁 샐러리\n저녁 생크림케이크\n저녁 설렁탕\n저녁 소갈비찜\n저녁 소고기등심\n저녁 수박\n저녁 스파게티\n저녁 시금치나물\n저녁 시리얼\n저녁 식빵\n저녁 아몬드\n저녁 아보카도\n저녁 야채죽\n저녁 양배추찜\n저녁 양상추\n저녁 연어\n저녁 오이\n저녁 요거트\n저녁 우동\n"+
-                            "저녁 잡채\n저녁 장조림\n저녁 짜장면\n저녁 짬뽕\n저녁 찐단호박\n저녁 초콜릿케이크\n저녁 치즈버거\n저녁 치킨\n저녁 치킨샐러드\n저녁 칼국수\n저녁 콘샐러드\n저녁 콩나물국\n저녁 탕수육\n저녁 토마토\n저녁 파전\n저녁 파프리카\n저녁 햄버거\n저녁 호밀빵\n"+
-                            "컵\n개\n조각\n인분\n"+
-                            "저녁 북어국 3인분"
-                            //"0.5컵\n 1컵\n 1.5컵\n 2컵\n 2.5컵\n 3컵\n 3.5컵\n 4컵\n 4.5컵\n 5컵\n 5.5컵\n 6컵\n 6.5컵\n 7컵\n 7.5컵\n 8컵\n 8.5컵\n 9컵\n 9.5컵\n 10컵\n"+
-                            //"0.5개\n 1개\n 1.5개\n 2개\n 2.5개\n 3개\n 3.5개\n 4개\n 4.5개\n 5개\n 5.5개\n 6개\n 6.5개\n 7개\n 7.5개\n 8개\n 8.5개\n 9개\n 9.5개\n 10개\n"+
-                            //"0.5조각\n 1조각\n 1.5조각\n 2조각\n 2.5조각\n 3조각\n 3.5조각\n 4조각\n 4.5조각\n 5조각\n 5.5조각\n 6조각\n 6.5조각\n 7조각\n 7.5조각\n 8조각\n 8.5조각\n 9조각\n 9.5조각\n 10조각\n"+
-                            //"0.5인분\n 1인분\n 1.5\n 2\n 2.5\n 3\n 3.5\n 4\n 4.5\n 5\n 5.5\n 6인분\n 6.5인분\n 7인분\n 7.5인분\n 8인분\n 8.5인분\n 9인분\n 9.5인분\n 10인분"
-                            );
+                    setUserDictionary("아침\n점심\n저녁\n컵\n개\n조각\n인분\n"+
+                            "물\n갈비탕\n갈치구이\n감자샐러드\n고등어구이\n곤약\n군고구마\n군만두\n귤\n김치볶음\n김치전\n김치찌개\n깍두기\n"+
+                            "다시마\n달걀프라이\n닭\n가슴살\n당근\n도넛\n돼지불고기\n된장찌개\n두부\n딸기\n떡국\n떡볶이\n라면\n멸치볶음\n물냉면\n바게트\n바나나\n밥\n배\n배추김치\n백김치\n백설기\n베이글\n북어국\n브로콜리\n비빔냉면\n"
+                                    +"사과\n삶은감자\n삶은달걀\n삼계탕\n샐러리\n생크림케이크\n설렁탕\n소갈비찜\n소고기등심\n수박\n스파게티\n시금치나물\n시리얼\n식빵\n아몬드\n아보카도\n야채죽\n양배추찜\n양상추\n연어\n오이\n요거트\n우동\n"
+                                    +"잡채\n장조림\n짜장면\n짬뽕\n찐단호박\n초콜릿케이크\n치즈버거\n치킨\n치킨샐러드\n칼국수\n콘샐러드\n콩나물국\n탕수육\n토마토\n파전\n파프리카\n햄버거\n호밀빵\n"
+                                    +"0.5컵\n 1컵\n 1.5컵\n 2컵\n 2.5컵\n 3컵\n 3.5컵\n 4컵\n 4.5컵\n 5컵\n 5.5컵\n 6컵\n 6.5컵\n 7컵\n 7.5컵\n 8컵\n 8.5컵\n 9컵\n 9.5컵\n 10컵\n"
+                                    +"0.5개\n 1개\n 1.5개\n 2개\n 2.5개\n 3개\n 3.5개\n 4개\n 4.5개\n 5개\n 5.5개\n 6개\n 6.5개\n 7개\n 7.5개\n 8개\n 8.5개\n 9개\n 9.5개\n 10개\n"
+                                    +"0.5조각\n 1조각\n 1.5조각\n 2조각\n 2.5조각\n 3조각\n 3.5조각\n 4조각\n 4.5조각\n 5조각\n 5.5조각\n 6조각\n 6.5조각\n 7조각\n 7.5조각\n 8조각\n 8.5조각\n 9조각\n 9.5조각\n 10조각\n"
+                                    +"0.5인분\n 1인분\n 1.5\n 2\n 2.5\n 3\n 3.5\n 4\n 4.5\n 5\n 5.5\n 6인분\n 6.5인분\n 7인분\n 7.5인분\n 8인분\n 8.5인분\n 9인분\n 9.5인분\n 10인분\n"
+                            //+ "아침 밥\n점심 밥\n저녁 밥"
+                    );
             client = builder.build();
             client.setSpeechRecognizeListener(this);
             client.startRecording(true);
@@ -480,6 +475,25 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         mHandler.postDelayed(new Runnable() {
             @Override
             public void run() {
+                String message;
+                System.out.println("에러코드 메시지: "+errorMsg);
+                switch (errorCode){
+                    case SpeechRecognizerClient.ERROR_AUDIO_FAIL: message = "음성입력이 불가능하거나 마이크 접근이 허용되지 않았을 경우.";break;
+                    case SpeechRecognizerClient.ERROR_AUTH_FAIL: message = "apikey 인증이 실패한 경우";break;
+                    case SpeechRecognizerClient.ERROR_NETWORK_FAIL: message = "네트워크 오류가 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_NETWORK_TIMEOUT: message = "네트워크 타임아웃이 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_FAIL: message = "서버에서 오류가 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_TIMEOUT: message = "서버 응답 시간이 초과한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_NO_RESULT: message = "인식된 결과 목록이 없는 경우.";break;
+                    case SpeechRecognizerClient.ERROR_CLIENT: message = "클라이언트 내부 로직에서 오류가 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_RECOGNITION_TIMEOUT: message = "전체 소요시간에 대한 타임아웃이 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_UNSUPPORT_SERVICE: message = "제공하지 않는 서비스 타입이 지정됐을 경우.";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_USERDICT_EMPTY: message = "입력된 사용자 사전에 내용이 없는 경우..";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_ALLOWED_REQUESTS_EXCESS: message = "요청 허용 횟수 초과.";break;
+                    default: message = "알 수 없는 오류.";break;
+                }
+                System.out.println("에러코드: "+message+"\n");
+
                 Toast.makeText(getActivity(), "음성인식이 잘못되었습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
                 voiceReset();
                 btnVoice.setEnabled(true);
@@ -505,18 +519,10 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
             for(int i=0; strToken.hasMoreElements(); i++){
                 voice_food_amount = voice_food_amount + strToken.nextToken();
             }
-            if(voice_food_kind.equals("북엇국")){ voice_food_kind = "북어국"; }
-            food2 = voice_food_amount;
-            voice_food_amount = voice_food_amount.replace("반","0.5");
-            voice_food_amount = voice_food_amount.replace("한","1");
-            voice_food_amount = voice_food_amount.replace("두","2");
-            voice_food_amount = voice_food_amount.replace("세","3");
-            voice_food_amount = voice_food_amount.replaceAll("[^0123456789.]","");
-
-            Toast.makeText(getActivity(), "/"+string+"/"+"\n/"+voice_food_time + "/" +voice_food_kind +"/" + voice_food_amount+"/"
-                    +"\n" + getFood(voice_food_kind, food2), Toast.LENGTH_SHORT).show();// 전체 \n (식사)(종류)(양) \n 추정 종류 //지우기//
         }catch(Exception a){
-            Toast.makeText(getActivity(), "Exception)\n음성인식이 잘못되었습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getActivity(), "Exception) "+
+                    voice_food_time + "/" +voice_food_kind +"/" + voice_food_amount +
+                    "\n음성인식이 잘못되었습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
             voiceReset();
             btnVoice.setEnabled(true);
             return;
@@ -527,16 +533,22 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
             btnVoice.setEnabled(true);
             return;
         }
-        else if(voice_food_amount.length() == 0){
+        else if(voice_food_amount.length() == 0 || voice_food_amount.equals("0")){
             Toast.makeText(getActivity(), "음식의 양을 다시 말해주세요.", Toast.LENGTH_SHORT).show();//
             voiceReset();
             btnVoice.setEnabled(true);
             return;
         }
         else {
+            if(voice_food_kind.equals("북엇국")){ voice_food_kind = "북어국"; }
+            food2 = voice_food_amount;
+            voice_food_amount = rePlace(voice_food_amount);///
+            Toast.makeText(getActivity(), "/"+string+"/"+"\n/"+voice_food_time + "/" +voice_food_kind +"/" + voice_food_amount+"/"//, Toast.LENGTH_SHORT).show();// -> 전체, 식사/종류/양
+                    +"\n" + getFood(voice_food_kind, food2), Toast.LENGTH_SHORT).show(); // getFood 음성인식 후 음식종류가 띄어쓰기 됐을시에 대비한... ////
+
             voice_cursor = database.rawQuery("SELECT * FROM 음식정보 WHERE 음식구분='"+voice_food_kind+"'", null);
             if(voice_cursor==null){
-                String strKind = getFood(voice_food_kind, food2);
+                String strKind = getFood(voice_food_kind, food2); //////
                 if(strKind == null) {
                     Toast.makeText(getActivity(), "목록상에 없는 음식입니다!", Toast.LENGTH_SHORT).show();
                     voiceReset();
@@ -545,16 +557,32 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                 }
                 else voice_food_kind = strKind;
             }
-            else {
-                voice_cursor.moveToFirst();
-                voice_food_unit = voice_cursor.getString(5);
-                tv_voice_result.setText(voice_food_time + "/" + voice_food_kind + "/" + voice_food_amount + voice_food_unit);
-                btnVoice.setEnabled(true);
-            }
+            voice_cursor.moveToFirst();
+            voice_food_unit = voice_cursor.getString(5);
+            tv_voice_result.setText(voice_food_time + "/" + voice_food_kind + "/" + voice_food_amount + voice_food_unit);
+            btnVoice.setEnabled(true);
         }
 
     }
 
+    public String rePlace(String str){
+        float num = 0;
+        str = str.replace("반","/0.5/");
+        str = str.replace("한","/1/");
+        str = str.replace("일","/1/");
+        str = str.replace("두","/2/");
+        str = str.replace("세","/3/");
+        str = str.replace("네","/4/");
+        str = str.replace("내","/4/");
+        str = str.replace("다섯","/5/");
+        str = str.replace("열","/10/");
+        str = str.replaceAll("[^0123456789./]","");
+        StringTokenizer strToken = new StringTokenizer(str,"/");
+        for(int i=0; strToken.hasMoreElements(); i++){
+            num = num + Float.parseFloat(strToken.nextToken());
+        }
+        return new BigDecimal(Float.toString(num)).stripTrailingZeros().toPlainString();
+    }
     public void voiceReset(){
         voice_food_time = "(식사)";
         voice_food_kind = "(음식 종류)";
@@ -578,16 +606,17 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                 else continue;
             }
             if(food.charAt(1) == item_kind[i].charAt(1)){
-                //StringTokenizer strToken = new StringTokenizer(item_kind[i]," ");
                 String str = new StringTokenizer(item_kind[i]," ").nextToken();
+                if(food.charAt(2)==item_kind[i].charAt(2)){result = str;break;}
                 if(str.equals("김치볶음")||str.equals("김치전")||str.equals("김치찌개")||str.equals("삶은감자")||str.equals("삶은달걀")||str.equals("치킨샐러드")){
                     if(food2.charAt(0) == item_kind[i].charAt(2)){
                         result = str;
                         break;
                     }
-                    else break;
+                    else continue;
                 }
                 else {
+                    System.out.println("음식3");
                     result = str;
                     break;
                 }

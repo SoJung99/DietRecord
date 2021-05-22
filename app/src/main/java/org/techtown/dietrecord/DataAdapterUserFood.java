@@ -67,7 +67,7 @@ public class DataAdapterUserFood
         mDbHelper.close();
     }
 
-    public ArrayList<UserFood> getTableData()
+    public ArrayList<UserFood> getTableData() // 모두 불러오기
     {
         try
         {
