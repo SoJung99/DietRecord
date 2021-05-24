@@ -159,42 +159,44 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         btnVoiceAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                voice_cursor = database.rawQuery("SELECT * FROM 음식정보 WHERE 음식구분='"+voice_food_kind+"'", null);
-                if(voice_cursor == null){
-                    Toast.makeText(getActivity(), "음성인식을 (다시) 시도해 주세요!", Toast.LENGTH_SHORT).show();
+                if(food_time == null) {
+                    Toast.makeText(getActivity(), "식사를 선택해 주세요!", Toast.LENGTH_SHORT).show();
                 }
-                else{ //DB, 리스트에 넣기
-                    voice_cursor.moveToFirst();
-                    Float cal = Float.parseFloat(voice_food_amount) * voice_cursor.getFloat(1);
-                    Float A = voice_cursor.getFloat(2);
-                    Float B = voice_cursor.getFloat(3);
-                    Float C = voice_cursor.getFloat(4);
-                    String unit = voice_cursor.getString(5);
-                    String sql1 = "INSERT INTO 사용자식단 (식사, 음식구분, 양, 단위, 칼로리, 탄수화물, 단백질, 지방, 날짜) ";
-                    String sql2 = "VALUES ('"+food_time+"', '"+voice_food_kind+"', "+Float.parseFloat(voice_food_amount)+", '"+unit+"', "+cal+", "+A+", "+B+", "+C+", "+getDate()+")";
-                    database.execSQL(sql1+sql2);
+                else {
+                    voice_cursor = database.rawQuery("SELECT * FROM 음식정보 WHERE 음식구분='" + voice_food_kind + "'", null);
+                    if (voice_cursor == null) {
+                        Toast.makeText(getActivity(), "음성인식을 (다시) 시도해 주세요!", Toast.LENGTH_SHORT).show();
+                    } else { //DB, 리스트에 넣기
+                        voice_cursor.moveToFirst();
+                        Float cal = Float.parseFloat(voice_food_amount) * voice_cursor.getFloat(1);
+                        Float A = voice_cursor.getFloat(2);
+                        Float B = voice_cursor.getFloat(3);
+                        Float C = voice_cursor.getFloat(4);
+                        String unit = voice_cursor.getString(5);
+                        String sql1 = "INSERT INTO 사용자식단 (식사, 음식구분, 양, 단위, 칼로리, 탄수화물, 단백질, 지방, 날짜) ";
+                        String sql2 = "VALUES ('" + food_time + "', '" + voice_food_kind + "', " + Float.parseFloat(voice_food_amount) + ", '" + unit + "', " + cal + ", " + A + ", " + B + ", " + C + ", " + getDate() + ")";
+                        database.execSQL(sql1 + sql2);
 
-                    Cursor CURSOR = database.rawQuery("SELECT * FROM 사용자식단 ORDER BY ROWID DESC LIMIT 1", null);
-                    CURSOR.moveToFirst();
-                    int id = CURSOR.getInt(0);
-                    UserFood userFood = new UserFood(id, voice_food_kind, Float.parseFloat(voice_food_amount), unit, cal);
-                    if(food_time.equals("아침")){ // 아침 리스트에 추가
-                        recyclerADAPTER.addItem(userFood);
-                        recyclerADAPTER.notifyDataSetChanged();
-                        sumC1.setText(recyclerADAPTER.SumCalories(LIST)+"kcal");
+                        Cursor CURSOR = database.rawQuery("SELECT * FROM 사용자식단 ORDER BY ROWID DESC LIMIT 1", null);
+                        CURSOR.moveToFirst();
+                        int id = CURSOR.getInt(0);
+                        UserFood userFood = new UserFood(id, voice_food_kind, Float.parseFloat(voice_food_amount), unit, cal);
+                        if (food_time.equals("아침")) { // 아침 리스트에 추가
+                            recyclerADAPTER.addItem(userFood);
+                            recyclerADAPTER.notifyDataSetChanged();
+                            sumC1.setText(recyclerADAPTER.SumCalories(LIST) + "kcal");
+                        } else if (food_time.equals("점심")) { // 점심 리스트에 추가
+                            recyclerADAPTER2.addItem(userFood);
+                            recyclerADAPTER2.notifyDataSetChanged();
+                            sumC2.setText(recyclerADAPTER2.SumCalories(LIST2) + "kcal");
+                        } else if (food_time.equals("저녁")) { // 저녁 리스트에 추가
+                            recyclerADAPTER3.addItem(userFood);
+                            recyclerADAPTER3.notifyDataSetChanged();
+                            sumC3.setText(recyclerADAPTER3.SumCalories(LIST3) + "kcal");
+                        }
+                        sumC.setText((recyclerADAPTER.SumCalories(LIST) + recyclerADAPTER2.SumCalories(LIST2) + recyclerADAPTER3.SumCalories(LIST3)) + "kcal");
+                        voiceReset();
                     }
-                    else if(food_time.equals("점심")){ // 점심 리스트에 추가
-                        recyclerADAPTER2.addItem(userFood);
-                        recyclerADAPTER2.notifyDataSetChanged();
-                        sumC2.setText(recyclerADAPTER2.SumCalories(LIST2)+"kcal");
-                    }
-                    else if(food_time.equals("저녁")){ // 저녁 리스트에 추가
-                        recyclerADAPTER3.addItem(userFood);
-                        recyclerADAPTER3.notifyDataSetChanged();
-                        sumC3.setText(recyclerADAPTER3.SumCalories(LIST3)+"kcal");
-                    }
-                    sumC.setText((recyclerADAPTER.SumCalories(LIST)+recyclerADAPTER2.SumCalories(LIST2)+recyclerADAPTER3.SumCalories(LIST3))+"kcal");
-                    voiceReset();
                 }
             }
         });
