@@ -18,7 +18,7 @@
         android:layout_height="40dp"
         android:text="다이어트 N일차!"
         android:autoSizeTextType="uniform"
-        android:background="#ffffb3"
+        android:background="#ff8080"
         android:layout_gravity="center"/>
 
     <View
@@ -30,7 +30,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:textSize="20sp"
-        android:background="#ffffb3"
+        android:background="#ff8080"
         android:text="   사용자정보" />
 
     <View
@@ -118,7 +118,7 @@
         android:layout_width="match_parent"
         android:layout_height="30dp"
         android:textSize="20sp"
-        android:background="#ffffb3"
+        android:background="#ff8080"
         android:text="   오늘의 정보" />
 
     <View

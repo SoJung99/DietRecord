@@ -66,7 +66,7 @@ import java.util.concurrent.TimeUnit;
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class TabFragment1 extends Fragment {
-
+    // 다시 ㄱ
     private SignInButton signInButton;
     private GoogleSignInClient mGoogleSignInClient;
     private String TAG="mainTag";
