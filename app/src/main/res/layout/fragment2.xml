@@ -102,7 +102,7 @@
                         android:id="@+id/btn_voice"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginLeft="4dp"
                         android:text="음성인식"
                         android:textColor="#000000"
                         android:backgroundTint="#c2c2d6"
@@ -139,7 +139,7 @@
                         android:id="@+id/spinner2"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="8dp"
+                        android:layout_marginLeft="4dp"
                         android:layout_weight="1"
                         android:entries="@array/itemKind">
                     </Spinner>
