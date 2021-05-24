@@ -222,7 +222,7 @@ public class TabFragment1 extends Fragment {
             }
         }
 
-        sql = "DELETE FROM 사용자식단 WHERE 날짜 = " + dateToStr;
+        sql = "DELETE FROM 사용자식단 WHERE 음식구분 = '떡볶이'";
         database.execSQL(sql);
 
         sql = "INSERT INTO 사용자식단 (num, 음식구분, 양, 칼로리, 탄수화물, 단백질, 지방, 날짜) VALUES ("+n+", '"+"떡볶이"+"', "+200+" ,"+500+", "+50+", "+20+","+10+ ", "+ today+ ")";
@@ -733,16 +733,16 @@ public class TabFragment1 extends Fragment {
                         sum2 = (int) sum1;
                         String time = milli2string(laststartTime).substring(0, 10).replaceAll(" ", "");
 
-                        Cursor cur = database.rawQuery("SELECT * FROM 사용자운동 WHERE 날짜 = " + Integer.parseInt(time) + " AND 시작시간 = " + milli2string(laststartTime).substring(10), null);
+                        Cursor cur = database.rawQuery("SELECT * FROM 사용자운동 WHERE 날짜 = " + Integer.parseInt(time) + " AND 시작시간 = " + Integer.parseInt(milli2string(laststartTime).substring(10).replaceAll(":","").replaceAll(" ","")), null);
                         int n = cur.getCount();
                         if (n == 1){
 
                         } else{
                             if(String.valueOf(wr).equals("7")) {
-                                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜, 시작시간) VALUES ("+n+", '"+"걷기"+"', '"+"null"+"', "+(lastendTime-laststartTime)/60000+", "+sum2+", '"+Integer.parseInt(time)+"', '"+milli2string(laststartTime).substring(10)+"')";
+                                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜, 시작시간) VALUES ("+n+", '"+"걷기"+"', '"+"null"+"', "+(lastendTime-laststartTime)/60000+", "+sum2+", '"+Integer.parseInt(time)+"', '"+Integer.parseInt(milli2string(laststartTime).substring(10).replaceAll(":","").replaceAll(" ",""))+"')";
                                 database.execSQL(sql);
                             } else if(String.valueOf(wr).equals("8")){
-                                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜, 시작시간) VALUES ("+n+", '"+"달리기"+"', '"+"null"+"', "+(lastendTime-laststartTime)/60000+", "+sum2+", '"+Integer.parseInt(time)+"', '"+milli2string(laststartTime).substring(10)+"')";
+                                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜, 시작시간) VALUES ("+n+", '"+"달리기"+"', '"+"null"+"', "+(lastendTime-laststartTime)/60000+", "+sum2+", '"+Integer.parseInt(time)+"', '"+Integer.parseInt(milli2string(laststartTime).substring(10).replaceAll(":","").replaceAll(" ",""))+"')";
                                 database.execSQL(sql);
                             }
                         }
