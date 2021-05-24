@@ -28,6 +28,8 @@ import android.content.DialogInterface;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -48,20 +50,18 @@ import java.util.StringTokenizer;
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
 public class TabFragment2 extends Fragment implements View.OnClickListener, SpeechRecognizeListener{
-    String food_time;  // 선택된 식사 시간대
-    String food_kind;  // 선택된 음식 종류
-    String food_amount;// 선택된 음식 양
+    String food_time, food_kind, food_amount;  // 선택된 식사 시간대 // 선택된 음식 종류 // 선택된 음식 양
 
     Button btnVoice;
     TextView tv_voice_result;
 
-    String voice_food_time = "(식사)";      // 음성인식 식사 시간대
-    String voice_food_kind = "(음식 종류)"; // 음성인식 음식 종류
-    String voice_food_amount = "(양)";     // 음성인식 음식 양
-    String voice_food_unit = null;          // 단위
+    String voice_food_kind = "(음식 종류)", voice_food_amount = "(양)", voice_food_unit = null;
     Cursor voice_cursor = null;
     String food2;
     String[] item_kind;
+
+    RadioGroup rg;
+    RadioButton rb1, rb2, rb3;
 
     ArrayList<UserFood> LIST = new ArrayList<>();
     ArrayList<UserFood> LIST2 = new ArrayList<>();
@@ -124,6 +124,10 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         TextView sumC1 = (TextView)v.findViewById(R.id.sumCal_breakfast);
         TextView sumC2 = (TextView)v.findViewById(R.id.sumCal_lunch);
         TextView sumC3 = (TextView)v.findViewById(R.id.sumCal_dinner);
+        rg = v.findViewById(R.id.rg);
+        rb1 = v.findViewById(R.id.rb1);
+        rb2 = v.findViewById(R.id.rb2);
+        rb3 = v.findViewById(R.id.rb3);
 
         initLoadDB();
 
@@ -160,38 +164,36 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                     Toast.makeText(getActivity(), "음성인식을 (다시) 시도해 주세요!", Toast.LENGTH_SHORT).show();
                 }
                 else{ //DB, 리스트에 넣기
-                    voice_cursor.moveToFirst();
+                    //voice_cursor.moveToFirst();
                     Float cal = Float.parseFloat(voice_food_amount) * voice_cursor.getFloat(1);
                     Float A = voice_cursor.getFloat(2);
                     Float B = voice_cursor.getFloat(3);
                     Float C = voice_cursor.getFloat(4);
                     String sql1 = "INSERT INTO 사용자식단 (식사, 음식구분, 양, 단위, 칼로리, 탄수화물, 단백질, 지방, 날짜) ";
-                    String sql2 = "VALUES ('"+voice_food_time+"', '"+voice_food_kind+"', "+Float.parseFloat(voice_food_amount)+", '"+voice_food_unit+"', "+cal+", "+A+", "+B+", "+C+", "+getDate()+")";
+                    String sql2 = "VALUES ('"+food_time+"', '"+voice_food_kind+"', "+Float.parseFloat(voice_food_amount)+", '"+voice_food_unit+"', "+cal+", "+A+", "+B+", "+C+", "+getDate()+")";
                     database.execSQL(sql1+sql2);
 
                     Cursor CURSOR = database.rawQuery("SELECT * FROM 사용자식단 ORDER BY ROWID DESC LIMIT 1", null);
                     CURSOR.moveToFirst();
                     int id = CURSOR.getInt(0);
                     UserFood userFood = new UserFood(id, voice_food_kind, Float.parseFloat(voice_food_amount), voice_food_unit, cal);
-                    if(voice_food_time.equals("아침")){ // 아침 리스트에 추가
+                    if(food_time.equals("아침")){ // 아침 리스트에 추가
                         recyclerADAPTER.addItem(userFood);
                         recyclerADAPTER.notifyDataSetChanged();
                         sumC1.setText(recyclerADAPTER.SumCalories(LIST)+"kcal");
                     }
-                    else if(voice_food_time.equals("점심")){ // 점심 리스트에 추가
+                    else if(food_time.equals("점심")){ // 점심 리스트에 추가
                         recyclerADAPTER2.addItem(userFood);
                         recyclerADAPTER2.notifyDataSetChanged();
                         sumC2.setText(recyclerADAPTER2.SumCalories(LIST2)+"kcal");
                     }
-                    else if(voice_food_time.equals("저녁")){ // 저녁 리스트에 추가
+                    else if(food_time.equals("저녁")){ // 저녁 리스트에 추가
                         recyclerADAPTER3.addItem(userFood);
                         recyclerADAPTER3.notifyDataSetChanged();
                         sumC3.setText(recyclerADAPTER3.SumCalories(LIST3)+"kcal");
                     }
                     sumC.setText((recyclerADAPTER.SumCalories(LIST)+recyclerADAPTER2.SumCalories(LIST2)+recyclerADAPTER3.SumCalories(LIST3))+"kcal");
-
                     voiceReset();
-                    tv_voice_result.setText(voice_food_time + "/" + voice_food_kind +"/" + voice_food_amount);
                 }
             }
         });
@@ -203,7 +205,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
             public void onClick(View v) {
                 String[] strings = food_kind.split(" ", 2);
                 food_kind = strings[0];
-                if(food_time.equals("(식사)")){
+                if(food_time == null){
                     Toast.makeText(getActivity(), "식사를 선택하세요!", Toast.LENGTH_SHORT).show();
                 }
                 else if(food_kind.equals("(음식 종류)")){
@@ -362,15 +364,20 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                         .show();
             }
         });
-        // 식사 시간대 선택 박스
-        Spinner spinner = (Spinner)v.findViewById(R.id.spinner);
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() { //아이템 클릭했을 때
+        // 식사 시간대 선택. 라디오 버튼
+        rg.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                food_time = spinner.getSelectedItem().toString();
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                if(checkedId == R.id.rb1){ //아침
+                    food_time = rb1.getText().toString();
+                }
+                else if(checkedId == R.id.rb2){ //점심
+                    food_time = rb2.getText().toString();
+                }
+                else if(checkedId == R.id.rb3){ //저녁
+                    food_time = rb3.getText().toString();
+                }
             }
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) { }
         });
         // 음식 종류 선택 박스
         Spinner spinner2 = (Spinner)v.findViewById(R.id.spinner2);
@@ -424,7 +431,6 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                                     +"0.5개\n 1개\n 1.5개\n 2개\n 2.5개\n 3개\n 3.5개\n 4개\n 4.5개\n 5개\n 5.5개\n 6개\n 6.5개\n 7개\n 7.5개\n 8개\n 8.5개\n 9개\n 9.5개\n 10개\n"
                                     +"0.5조각\n 1조각\n 1.5조각\n 2조각\n 2.5조각\n 3조각\n 3.5조각\n 4조각\n 4.5조각\n 5조각\n 5.5조각\n 6조각\n 6.5조각\n 7조각\n 7.5조각\n 8조각\n 8.5조각\n 9조각\n 9.5조각\n 10조각\n"
                                     +"0.5인분\n 1인분\n 1.5\n 2\n 2.5\n 3\n 3.5\n 4\n 4.5\n 5\n 5.5\n 6인분\n 6.5인분\n 7인분\n 7.5인분\n 8인분\n 8.5인분\n 9인분\n 9.5인분\n 10인분\n"
-                            //+ "아침 밥\n점심 밥\n저녁 밥"
                     );
             client = builder.build();
             client.setSpeechRecognizeListener(this);
@@ -478,18 +484,18 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                 String message;
                 System.out.println("에러코드 메시지: "+errorMsg);
                 switch (errorCode){
-                    case SpeechRecognizerClient.ERROR_AUDIO_FAIL: message = "음성입력이 불가능하거나 마이크 접근이 허용되지 않았을 경우.";break;
-                    case SpeechRecognizerClient.ERROR_AUTH_FAIL: message = "apikey 인증이 실패한 경우";break;
-                    case SpeechRecognizerClient.ERROR_NETWORK_FAIL: message = "네트워크 오류가 발생한 경우.";break;
-                    case SpeechRecognizerClient.ERROR_NETWORK_TIMEOUT: message = "네트워크 타임아웃이 발생한 경우.";break;
-                    case SpeechRecognizerClient.ERROR_SERVER_FAIL: message = "서버에서 오류가 발생한 경우.";break;
-                    case SpeechRecognizerClient.ERROR_SERVER_TIMEOUT: message = "서버 응답 시간이 초과한 경우.";break;
-                    case SpeechRecognizerClient.ERROR_NO_RESULT: message = "인식된 결과 목록이 없는 경우.";break;
-                    case SpeechRecognizerClient.ERROR_CLIENT: message = "클라이언트 내부 로직에서 오류가 발생한 경우.";break;
-                    case SpeechRecognizerClient.ERROR_RECOGNITION_TIMEOUT: message = "전체 소요시간에 대한 타임아웃이 발생한 경우.";break;
-                    case SpeechRecognizerClient.ERROR_SERVER_UNSUPPORT_SERVICE: message = "제공하지 않는 서비스 타입이 지정됐을 경우.";break;
-                    case SpeechRecognizerClient.ERROR_SERVER_USERDICT_EMPTY: message = "입력된 사용자 사전에 내용이 없는 경우..";break;
-                    case SpeechRecognizerClient.ERROR_SERVER_ALLOWED_REQUESTS_EXCESS: message = "요청 허용 횟수 초과.";break;
+                    case SpeechRecognizerClient.ERROR_AUDIO_FAIL: message = "ERROR_AUDIO_FAIL: 음성입력이 불가능하거나 마이크 접근이 허용되지 않았을 경우.";break;
+                    case SpeechRecognizerClient.ERROR_AUTH_FAIL: message = "ERROR_AUTH_FAIL: apikey 인증이 실패한 경우";break;
+                    case SpeechRecognizerClient.ERROR_NETWORK_FAIL: message = "ERROR_NETWORK_FAIL: 네트워크 오류가 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_NETWORK_TIMEOUT: message = "ERROR_NETWORK_TIMEOUT: 네트워크 타임아웃이 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_FAIL: message = "ERROR_SERVER_FAIL: 서버에서 오류가 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_TIMEOUT: message = "ERROR_SERVER_TIMEOUT: 서버 응답 시간이 초과한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_NO_RESULT: message = "ERROR_NO_RESULT: 인식된 결과 목록이 없는 경우.";break;
+                    case SpeechRecognizerClient.ERROR_CLIENT: message = "ERROR_CLIENT: 클라이언트 내부 로직에서 오류가 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_RECOGNITION_TIMEOUT: message = "ERROR_RECOGNITION_TIMEOUT: 전체 소요시간에 대한 타임아웃이 발생한 경우.";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_UNSUPPORT_SERVICE: message = "ERROR_SERVER_UNSUPPORT_SERVICE: 제공하지 않는 서비스 타입이 지정됐을 경우.";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_USERDICT_EMPTY: message = "ERROR_SERVER_USERDICT_EMPTY: 입력된 사용자 사전에 내용이 없는 경우..";break;
+                    case SpeechRecognizerClient.ERROR_SERVER_ALLOWED_REQUESTS_EXCESS: message = "ERROR_SERVER_ALLOWED_REQUESTS_EXCESS: 요청 허용 횟수 초과.";break;
                     default: message = "알 수 없는 오류.";break;
                 }
                 System.out.println("에러코드: "+message+"\n");
@@ -511,44 +517,43 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         builder.append(texts.get(0));
         String str = builder.toString();
         StringTokenizer strToken = new StringTokenizer(str," ");
-        String string = str.replace(" ","_");////////////////////////////////////////////////////////////////
+        String string = str.replace(" ","_");///////
         try{
-            voice_food_time = strToken.nextToken();
             voice_food_kind = strToken.nextToken();
             voice_food_amount = strToken.nextToken();
+            food2 = voice_food_amount;
             for(int i=0; strToken.hasMoreElements(); i++){
                 voice_food_amount = voice_food_amount + strToken.nextToken();
             }
+            voice_food_amount = rePlace(voice_food_amount);
         }catch(Exception a){
-            Toast.makeText(getActivity(), "Exception) "+
-                    voice_food_time + "/" +voice_food_kind +"/" + voice_food_amount +
+            Toast.makeText(getActivity(), "Exception) "+ string + /////
                     "\n음성인식이 잘못되었습니다.\n다시 시도해 주세요.", Toast.LENGTH_SHORT).show();
             voiceReset();
             btnVoice.setEnabled(true);
             return;
         }
-        if(!voice_food_time.equals("아침") && !voice_food_time.equals("점심") && !voice_food_time.equals("저녁")){
-            Toast.makeText(getActivity(), "식사는 아침, 점심, 저녁 중에서 선택하여 말해주세요.", Toast.LENGTH_SHORT).show();//
+        if(food_time == null){
+            Toast.makeText(getActivity(), "식사를 선택해 주세요!", Toast.LENGTH_SHORT).show();//
             voiceReset();
             btnVoice.setEnabled(true);
             return;
         }
         else if(voice_food_amount.length() == 0 || voice_food_amount.equals("0")){
-            Toast.makeText(getActivity(), "음식의 양을 다시 말해주세요.", Toast.LENGTH_SHORT).show();//
+            Toast.makeText(getActivity(), "음식의 양을 다시 말해주세요!", Toast.LENGTH_SHORT).show();//
             voiceReset();
             btnVoice.setEnabled(true);
             return;
         }
         else {
             if(voice_food_kind.equals("북엇국")){ voice_food_kind = "북어국"; }
-            food2 = voice_food_amount;
-            voice_food_amount = rePlace(voice_food_amount);///
-            Toast.makeText(getActivity(), "/"+string+"/"+"\n/"+voice_food_time + "/" +voice_food_kind +"/" + voice_food_amount+"/"//, Toast.LENGTH_SHORT).show();// -> 전체, 식사/종류/양
-                    +"\n" + getFood(voice_food_kind, food2), Toast.LENGTH_SHORT).show(); // getFood 음성인식 후 음식종류가 띄어쓰기 됐을시에 대비한... ////
+
+            System.out.println("/"+string+"/"+"\n/"+food_time + "/" +voice_food_kind +"/" + voice_food_amount+"/"//, Toast.LENGTH_SHORT).show();// -> 전체, 식사/종류/양
+                    +"\n" + "/" + getFood(voice_food_kind, food2) + "/"); // getFood: 음성인식 후 음식종류가 띄어쓰기 됐을시에 대비한... ///////
 
             voice_cursor = database.rawQuery("SELECT * FROM 음식정보 WHERE 음식구분='"+voice_food_kind+"'", null);
             if(voice_cursor==null){
-                String strKind = getFood(voice_food_kind, food2); //////
+                String strKind = getFood(voice_food_kind, food2); //
                 if(strKind == null) {
                     Toast.makeText(getActivity(), "목록상에 없는 음식입니다!", Toast.LENGTH_SHORT).show();
                     voiceReset();
@@ -559,7 +564,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
             }
             voice_cursor.moveToFirst();
             voice_food_unit = voice_cursor.getString(5);
-            tv_voice_result.setText(voice_food_time + "/" + voice_food_kind + "/" + voice_food_amount + voice_food_unit);
+            tv_voice_result.setText(voice_food_kind + "/" + voice_food_amount + voice_food_unit);
             btnVoice.setEnabled(true);
         }
 
@@ -584,11 +589,11 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         return new BigDecimal(Float.toString(num)).stripTrailingZeros().toPlainString();
     }
     public void voiceReset(){
-        voice_food_time = "(식사)";
         voice_food_kind = "(음식 종류)";
         voice_food_amount = "(양)";
         voice_food_unit = null;
         voice_cursor = null;
+        tv_voice_result.setText(voice_food_kind +"/" + voice_food_amount);
     }
 
     public String getFood(String food, String food2){
@@ -622,7 +627,6 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                 }
             }
         }
-        //String str = new StringTokenizer(result," ").nextToken();
         return result;
     }
 
