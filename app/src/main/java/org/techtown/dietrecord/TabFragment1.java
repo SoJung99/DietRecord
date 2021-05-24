@@ -7,6 +7,8 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.res.Resources;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
@@ -38,6 +40,7 @@ import com.google.android.gms.fitness.data.DataPoint;
 import com.google.android.gms.fitness.data.DataSet;
 import com.google.android.gms.fitness.data.DataType;
 import com.google.android.gms.fitness.data.Field;
+import com.google.android.gms.fitness.data.Value;
 import com.google.android.gms.fitness.request.DataReadRequest;
 import com.google.android.gms.fitness.result.DataReadResponse;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -49,12 +52,17 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
+import java.text.DateFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.TimeUnit;
-
 
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class TabFragment1 extends Fragment {
@@ -64,56 +72,107 @@ public class TabFragment1 extends Fragment {
     private String TAG="mainTag";
     private FirebaseAuth mAuth;
     private int RC_SIGN_IN=123;
+    Value wr; // 7이면 걷기 8이면 달리기
 
     long laststartTime, lastendTime, calstartTime, calendTime;
 
     private static final int REQUEST_OAUTH_REQUEST_CODE = 0x1001;
 
+    ArrayList<ExerciseData> list;
+    DataAdapter mDbHelper;
+    DataBaseHelper dbHelper;
+    SQLiteDatabase database;
+
+    public void intitLoadDB(){
+        mDbHelper = new DataAdapter(getActivity().getApplicationContext());
+        mDbHelper.createDatabase();
+        mDbHelper.open();
+
+        dbHelper = new DataBaseHelper(getActivity().getApplicationContext());
+        dbHelper.openDataBase();
+        dbHelper.close();
+        database = dbHelper.getWritableDatabase();
+
+        list = mDbHelper.getTableData();
+
+        // mDbHelper.close();
+    }
+
 
     final String[] gender = new String[]{"남자", "여자"};
 
-    int howlong = 1; // n일째 다이어트
-    int cal_recom_take = 2100, cal_present_take = 1300; // 섭취칼로리
-    int cal_recom_burning = 1500, cal_present_burning = 800; // 소모칼로리
-    int water_recom = 2000, water_present = 1500; // 물섭취
-    int Car_entire = 100, Car_present = 25; // 탄수화물
-    int Pro_entire = 100, Pro_present = 50; // 단백질
-    int Fat_entire = 100, Fat_present = 75; // 지방
+    int cal_recom_take = 2100, cal_present_take = 0; // 섭취칼로리
+    int cal_recom_burning = 1500, cal_present_burning = 0; // 소모칼로리
+    int water_recom = 2000, water_present = 0; // 물섭취
+    int Car_entire = 100, Car_present = 0; // 탄수화물
+    int Pro_entire = 100, Pro_present = 0; // 단백질
+    int Fat_entire = 100, Fat_present = 0; // 지방
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment1, container, false);
 
-        Button btn1 = (Button) v.findViewById(R.id.button1);
-        Button btn2 = (Button) v.findViewById(R.id.button2);
-        Button btn3 = (Button) v.findViewById(R.id.button3);
-        Button btn4 = (Button) v.findViewById(R.id.button4);
+        intitLoadDB();
 
-        ProgressBar pb1 = (ProgressBar) v.findViewById(R.id.progressBar1);
-        ProgressBar pb2 = (ProgressBar) v.findViewById(R.id.progressBar2);
-        ProgressBar pb3 = (ProgressBar) v.findViewById(R.id.progressBar3);
-        ProgressBar pb4 = (ProgressBar) v.findViewById(R.id.progressBar4);
-        ProgressBar pb5 = (ProgressBar) v.findViewById(R.id.progressBar5);
-        ProgressBar pb6 = (ProgressBar) v.findViewById(R.id.progressBar6);
+        Button btn1 = v.findViewById(R.id.button1);
+        Button btn2 = v.findViewById(R.id.button2);
+        Button btn3 = v.findViewById(R.id.button3);
+        Button btn4 = v.findViewById(R.id.button4);
 
-        TextView tv1 = (TextView) v.findViewById(R.id.textView1);
-        TextView tv3 = (TextView) v.findViewById(R.id.textView3);
-        TextView tv4 = (TextView) v.findViewById(R.id.textView4);
-        TextView tv5 = (TextView) v.findViewById(R.id.textView5);
-        TextView tv6 = (TextView) v.findViewById(R.id.textView6);
-        TextView tv8 = (TextView) v.findViewById(R.id.textView8);
-        TextView tv9 = (TextView) v.findViewById(R.id.textView9);
-        TextView tv10 = (TextView) v.findViewById(R.id.textView10);
-        TextView tv11 = (TextView) v.findViewById(R.id.textView11);
-        TextView tv12 = (TextView) v.findViewById(R.id.textView12);
-        TextView tv13 = (TextView) v.findViewById(R.id.textView13);
+        ProgressBar pb1 = v.findViewById(R.id.progressBar1);
+        ProgressBar pb2 = v.findViewById(R.id.progressBar2);
+        ProgressBar pb3 = v.findViewById(R.id.progressBar3);
+        ProgressBar pb4 = v.findViewById(R.id.progressBar4);
+        ProgressBar pb5 = v.findViewById(R.id.progressBar5);
+        ProgressBar pb6 = v.findViewById(R.id.progressBar6);
+
+        TextView tv1 = v.findViewById(R.id.textView1);
+        TextView tv3 = v.findViewById(R.id.textView3);
+        TextView tv4 = v.findViewById(R.id.textView4);
+        TextView tv5 = v.findViewById(R.id.textView5);
+        TextView tv6 = v.findViewById(R.id.textView6);
+        TextView tv8 = v.findViewById(R.id.textView8);
+        TextView tv9 = v.findViewById(R.id.textView9);
+        TextView tv10 = v.findViewById(R.id.textView10);
+        TextView tv11 = v.findViewById(R.id.textView11);
+        TextView tv12 = v.findViewById(R.id.textView12);
+        TextView tv13 = v.findViewById(R.id.textView13);
 
         // 로그인 버튼
         signInButton = v.findViewById(R.id.SignIn_Button);
 
-        tv1.setText("다이어트 " + howlong +"일차!");
-        // ADD howlong++
+        String sql = "DELETE FROM 사용자정보 WHERE 날짜 ='20210520'";
+        database.execSQL(sql);
+
+        sql = "INSERT INTO 사용자정보 (날짜, 성별, 나이, 키, 몸무게, 소모칼로리, 섭취칼로리) VALUES ("+20210520+", '"+"남자"+"', "+25+" ,"+196+", "+84+", "+100+","+100+")";
+        database.execSQL(sql);
+
+        Cursor cur_date = database.rawQuery("select 날짜 from 사용자정보 ", null);
+        cur_date.moveToNext();
+        int a_date = cur_date.getInt(0);
+        String before = Integer.toString(a_date);
+
+        try {
+            Date d1 = new SimpleDateFormat("yyyyMMdd").parse(before);
+            Date d2 = new Date();
+            long diffDay = (d2.getTime() - d1.getTime()) / (24*60*60*1000);
+            diffDay++;
+            tv1.setText("다이어트 " + diffDay +"일차!");
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+
+        List userList1 = new ArrayList();
+        Cursor cur1 = database.rawQuery("SELECT 섭취칼로리 FROM 사용자정보", null);
+        int a;
+        if (cur1 != null) {
+            while( cur1.moveToNext() ) {
+                a = cur1.getInt(0);
+                cal_present_take = a;
+                userList1.add(a);
+            }
+        }
 
         tv8.setText("   오늘의 권장 섭취 칼로리 : " + cal_recom_take);
         tv9.setText("   현재 섭취 칼로리 : " + cal_present_take);
@@ -121,11 +180,26 @@ public class TabFragment1 extends Fragment {
         pb1.setMax(cal_recom_take);
         pb1.setProgress(cal_present_take);
 
+        Cursor cur2 = database.rawQuery("SELECT 소모칼로리 FROM 사용자정보", null);
+        if (cur2 != null) {
+            while( cur2.moveToNext() ) {
+                a = cur2.getInt(0);
+                cal_present_burning = a;
+            }
+        }
+
         tv10.setText("   오늘의 권장 운동 칼로리 : " + cal_recom_burning);
         tv11.setText("   현재 운동 칼로리 : " + cal_present_burning);
 
         pb2.setMax(cal_recom_burning);
         pb2.setProgress(cal_present_burning);
+
+        Cursor cur_w = database.rawQuery("SELECT * FROM 사용자식단 WHERE 음식구분 = '물'", null);
+        if (cur_w != null) {
+            while( cur_w.moveToNext() ) {
+                water_present += cur_w.getInt(0);
+            }
+        }
 
         tv12.setText("   하루 권장 섭취 수분 : " + water_recom);
         tv13.setText("   현재 섭취 수분 : "  + water_present);
@@ -133,14 +207,48 @@ public class TabFragment1 extends Fragment {
         pb3.setMax(water_recom);
         pb3.setProgress(water_present);
 
+        DateFormat dateFormat = new SimpleDateFormat("YYYYMMDD");
+        Date date = new Date();
+        String dateToStr = dateFormat.format(date);
+        int today = Integer.parseInt(dateToStr);
+
+        List userList = new ArrayList();
+        Cursor cur = database.rawQuery("SELECT 섭취칼로리 FROM 사용자정보", null);
+        int n = cur.getCount()+1;
+        if (cur != null) {
+            while( cur.moveToNext() ) {
+                a = cur.getInt(0);
+                userList.add(a);
+            }
+        }
+
+        sql = "DELETE FROM 사용자식단 WHERE 날짜 = " + dateToStr;
+        database.execSQL(sql);
+
+        sql = "INSERT INTO 사용자식단 (num, 음식구분, 양, 칼로리, 탄수화물, 단백질, 지방, 날짜) VALUES ("+n+", '"+"떡볶이"+"', "+200+" ,"+500+", "+50+", "+20+","+10+ ", "+ today+ ")";
+        database.execSQL(sql);
+
+        Cursor cur3 = database.rawQuery("select sum(탄수화물) from 사용자식단 where 날짜 = " + dateToStr, null);
+        cur3.moveToNext();
+        Car_present = cur3.getInt(0);
+
         pb4.setMax(Car_entire);
         pb4.setProgress(Car_present);
+
+        Cursor cur4 = database.rawQuery("select sum(단백질) from 사용자식단 where 날짜 = " + dateToStr, null);
+        cur4.moveToNext();
+        Pro_present = cur4.getInt(0);
 
         pb5.setMax(Pro_entire);
         pb5.setProgress(Pro_present);
 
+        Cursor cur5 = database.rawQuery("select sum(지방) from 사용자식단 where 날짜 = " + dateToStr, null);
+        cur5.moveToNext();
+        Fat_present = cur5.getInt(0);
+
         pb6.setMax(Fat_entire);
         pb6.setProgress(Fat_present);
+
 
         btn1.setOnClickListener(new View.OnClickListener() { // 성별 변경 버튼
 
@@ -159,7 +267,15 @@ public class TabFragment1 extends Fragment {
                     public void onClick(DialogInterface dialogInterface, int i) {
                         Toast.makeText(getActivity(), gender[a] + "로 변경되었습니다.", Toast.LENGTH_SHORT).show();
                         tv3.setText("  성별 : " + gender[a]);
+
                         // ADD DB에 gender[a] 저장하는 코드
+                        if(a == 0) {
+                            String sql = "UPDATE 사용자정보 SET 성별 ='남자'";
+                            database.execSQL(sql);
+                        } else{
+                            String sql = "UPDATE 사용자정보 SET 성별 ='여자'";
+                            database.execSQL(sql);
+                        }
                     }
                 });
 
@@ -182,10 +298,10 @@ public class TabFragment1 extends Fragment {
                 ageDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 ageDialog.setContentView(R.layout.agedialog);
 
-                Button okBtn = (Button) ageDialog.findViewById(R.id.age_btn_ok);
-                Button cancelBtn = (Button) ageDialog.findViewById(R.id.age_btn_cancel);
+                Button okBtn = ageDialog.findViewById(R.id.age_btn_ok);
+                Button cancelBtn = ageDialog.findViewById(R.id.age_btn_cancel);
 
-                final NumberPicker np = (NumberPicker) ageDialog.findViewById(R.id.agePicker);
+                final NumberPicker np = ageDialog.findViewById(R.id.agePicker);
                 np.setMinValue(0);
                 np.setMaxValue(100);
                 np.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
@@ -217,10 +333,14 @@ public class TabFragment1 extends Fragment {
                 okBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v){
-                        tv4.setText("  나이 : "+ String.valueOf(np.getValue()));
+                        tv4.setText("  나이 : "+ np.getValue());
                         Toast.makeText(getActivity(), np.getValue() + "세 로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
                         // ADD DB에 np.getValue() 저장하는 코드
-                        ageDialog.dismiss();
+                        int a = np.getValue();
+
+                        String sql = "UPDATE 사용자정보 SET 나이 = "+a+"";
+                        database.execSQL(sql);
                     }
                 });
                 cancelBtn.setOnClickListener(new View.OnClickListener() {
@@ -231,8 +351,6 @@ public class TabFragment1 extends Fragment {
                 });
                 ageDialog.show();
             }
-
-
         });
 
         btn3.setOnClickListener(new View.OnClickListener() { // 키 변경 버튼
@@ -242,10 +360,10 @@ public class TabFragment1 extends Fragment {
                 heightDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 heightDialog.setContentView(R.layout.heightdialog);
 
-                Button okBtn = (Button) heightDialog.findViewById(R.id.height_btn_ok);
-                Button cancelBtn = (Button) heightDialog.findViewById(R.id.height_btn_cancel);
+                Button okBtn = heightDialog.findViewById(R.id.height_btn_ok);
+                Button cancelBtn = heightDialog.findViewById(R.id.height_btn_cancel);
 
-                final NumberPicker np1 = (NumberPicker) heightDialog.findViewById(R.id.heightPicker_wh);
+                final NumberPicker np1 = heightDialog.findViewById(R.id.heightPicker_wh);
                 np1.setMinValue(130);
                 np1.setMaxValue(220);
                 np1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
@@ -257,7 +375,7 @@ public class TabFragment1 extends Fragment {
                     }
                 });
 
-                final NumberPicker np2 = (NumberPicker) heightDialog.findViewById(R.id.heightPicker_dec);
+                final NumberPicker np2 = heightDialog.findViewById(R.id.heightPicker_dec);
                 np2.setMinValue(0);
                 np2.setMaxValue(9);
                 np2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
@@ -290,9 +408,15 @@ public class TabFragment1 extends Fragment {
                 okBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v){
-                        tv5.setText("  키 : "+ String.valueOf(np1.getValue()) + "." + String.valueOf(np2.getValue()) + "cm");
-                        Toast.makeText(getActivity(), String.valueOf(np1.getValue()) + "." + String.valueOf(np2.getValue()) + "cm 로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                        tv5.setText("  키 : "+ np1.getValue() + "." + np2.getValue() + "cm");
+                        Toast.makeText(getActivity(), np1.getValue() + "." + np2.getValue() + "cm 로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
                         // ADD DB에 np.getValue() 저장하는 코드
+                        float a = (float) (np1.getValue() + 0.1*np2.getValue());
+
+                        String sql = "UPDATE 사용자정보 SET 키 = "+a+"";
+                        database.execSQL(sql);
+
                         heightDialog.dismiss();
                     }
                 });
@@ -313,10 +437,10 @@ public class TabFragment1 extends Fragment {
                 weightDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
                 weightDialog.setContentView(R.layout.weightdialog);
 
-                Button okBtn = (Button) weightDialog.findViewById(R.id.weight_btn_ok);
-                Button cancelBtn = (Button) weightDialog.findViewById(R.id.weight_btn_cancel);
+                Button okBtn = weightDialog.findViewById(R.id.weight_btn_ok);
+                Button cancelBtn = weightDialog.findViewById(R.id.weight_btn_cancel);
 
-                final NumberPicker np1 = (NumberPicker) weightDialog.findViewById(R.id.weightPicker_wh);
+                final NumberPicker np1 = weightDialog.findViewById(R.id.weightPicker_wh);
                 np1.setMinValue(40);
                 np1.setMaxValue(130);
                 np1.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
@@ -328,7 +452,7 @@ public class TabFragment1 extends Fragment {
                     }
                 });
 
-                final NumberPicker np2 = (NumberPicker) weightDialog.findViewById(R.id.weightPicker_dec);
+                final NumberPicker np2 = weightDialog.findViewById(R.id.weightPicker_dec);
                 np2.setMinValue(0);
                 np2.setMaxValue(9);
                 np2.setDescendantFocusability(NumberPicker.FOCUS_BLOCK_DESCENDANTS);
@@ -361,9 +485,15 @@ public class TabFragment1 extends Fragment {
                 okBtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v){
-                        tv6.setText("  몸무게 : "+ String.valueOf(np1.getValue()) + "." + String.valueOf(np2.getValue()) + "kg");
-                        Toast.makeText(getActivity(), String.valueOf(np1.getValue()) + "." + String.valueOf(np2.getValue()) + "kg 로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+                        tv6.setText("  몸무게 : "+ np1.getValue() + "." + np2.getValue() + "kg");
+                        Toast.makeText(getActivity(), np1.getValue() + "." + np2.getValue() + "kg 로 변경되었습니다.", Toast.LENGTH_SHORT).show();
+
                         // ADD DB에 np.getValue() 저장하는 코드
+                        float a = (float) (np1.getValue() + 0.1*np2.getValue());
+
+                        String sql = "UPDATE 사용자정보 SET 몸무게 = "+a+"";
+                        database.execSQL(sql);
+
                         weightDialog.dismiss();
                     }
                 });
@@ -425,7 +555,14 @@ public class TabFragment1 extends Fragment {
                                                             public void onComplete(@NonNull Task<Void> task) {
                                                                 if (task.isSuccessful()) {
                                                                     Log.i(TAG, "Successfully subscribed!");
-                                                                    readData();
+                                                                    // readData 반복실행
+                                                                    Timer timer = new Timer();
+                                                                    TimerTask timerTask = new TimerTask() {
+                                                                        @Override public void run() {
+                                                                            readData();
+                                                                        }
+                                                                    };
+                                                                    timer.schedule(timerTask, 0, 60*1000); // 1분 주기
                                                                 } else {
                                                                     Log.w(TAG, "There was a problem subscribing.", task.getException());
                                                                 }
@@ -467,7 +604,14 @@ public class TabFragment1 extends Fragment {
 
         if (resultCode == Activity.RESULT_OK) {// 로그인 성공 시
             if (requestCode == REQUEST_OAUTH_REQUEST_CODE) {// 권한 얻었을 시
-                readData();
+                // readData 반복실행
+                Timer timer = new Timer();
+                TimerTask timerTask = new TimerTask() {
+                    @Override public void run() {
+                        readData();
+                    }
+                };
+                timer.schedule(timerTask, 0, 60*1000); // 1분 주기
             }
         }
     }
@@ -505,7 +649,7 @@ public class TabFragment1 extends Fragment {
     // 원하는 시간대 조정하기 쉽게 시간은 밀리세컨드 단위로 통일
     // 밀리세컨드 단위로 바꿔줌
     public static String milli2string(long time) {
-        SimpleDateFormat format = new SimpleDateFormat("E MMM dd HH:mm:ss", Locale.UK);
+        SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
         return format.format(time);
     }
 
@@ -515,19 +659,13 @@ public class TabFragment1 extends Fragment {
         Date now = Calendar.getInstance().getTime();
         cal.setTime(now);
 
-        cal.add(Calendar.DATE, -1);
-
-        //12시부터 18시 사이의 걸음수 조회
-        // 가져올 데이터 시작 시간(12시)
         cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH), 0, 0, 0);
         long startTime = cal.getTimeInMillis();
 
-        // 가져올 데이터 종료 시간(18시)
         cal.set(cal.get(Calendar.YEAR), cal.get(Calendar.MONTH),
                 cal.get(Calendar.DAY_OF_MONTH), 24, 0, 0);
         long endTime = cal.getTimeInMillis();
-
 
         Fitness.getHistoryClient(getActivity(),
                 GoogleSignIn.getLastSignedInAccount(getActivity()))
@@ -554,9 +692,10 @@ public class TabFragment1 extends Fragment {
                             lastendTime = dp.getEndTime(TimeUnit.MILLISECONDS);
                             for (Field field : dp.getDataType().getFields()) {
                                 Log.i(TAG, "\tField: " + field.getName() + " Value: " + dp.getValue(field));
+                                wr = dp.getValue(field);
+                                Log.i(TAG, String.valueOf(wr));
                             }
                         }
-
 
 
                     }
@@ -571,7 +710,8 @@ public class TabFragment1 extends Fragment {
                 .addOnSuccessListener(new OnSuccessListener<DataReadResponse>() {
                     @Override
                     public void onSuccess(DataReadResponse response) {
-                        float sum = 0;
+                        float sum1 = 0;
+                        int sum2;
 
                         DataSet dataSet = response.getDataSet(DataType.TYPE_CALORIES_EXPENDED);
 
@@ -586,18 +726,28 @@ public class TabFragment1 extends Fragment {
                                 Log.i(TAG, "\tEnd: " + milli2string(dp.getEndTime(TimeUnit.MILLISECONDS)));
                                 for (Field field : dp.getDataType().getFields()) {
                                     Log.i(TAG, "\tField: " + field.getName() + " Value: " + dp.getValue(field));
-                                    sum += dp.getValue(field).asFloat();
+                                    sum1 += dp.getValue(field).asFloat();
                                 }
                             }
                         }
-                        Log.i(TAG," : " + Float.toString(sum));
+                        sum2 = (int) sum1;
+                        String time = milli2string(laststartTime).substring(0, 10).replaceAll(" ", "");
 
+                        Cursor cur = database.rawQuery("SELECT * FROM 사용자운동 WHERE 날짜 = " + Integer.parseInt(time) + " AND 시작시간 = " + milli2string(laststartTime).substring(10), null);
+                        int n = cur.getCount();
+                        if (n == 1){
 
+                        } else{
+                            if(String.valueOf(wr).equals("7")) {
+                                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜, 시작시간) VALUES ("+n+", '"+"걷기"+"', '"+"null"+"', "+(lastendTime-laststartTime)/60000+", "+sum2+", '"+Integer.parseInt(time)+"', '"+milli2string(laststartTime).substring(10)+"')";
+                                database.execSQL(sql);
+                            } else if(String.valueOf(wr).equals("8")){
+                                String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜, 시작시간) VALUES ("+n+", '"+"달리기"+"', '"+"null"+"', "+(lastendTime-laststartTime)/60000+", "+sum2+", '"+Integer.parseInt(time)+"', '"+milli2string(laststartTime).substring(10)+"')";
+                                database.execSQL(sql);
+                            }
+                        }
                     }
                 });
-
-
-        // 구글핏에서는 걸음수 데이터가 걸을때마다 생성되고 걸음이 없으면 데이터 생성X
     }
 
     @Override
