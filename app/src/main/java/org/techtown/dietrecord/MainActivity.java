@@ -1,6 +1,7 @@
 package org.techtown.dietrecord;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -25,6 +26,8 @@ public class MainActivity extends AppCompatActivity {
         TabLayout tabLayout = findViewById(R.id.main_tablayout);
 
 
+
+        tabLayout.getChildAt(0).setBackgroundColor(Color.parseColor("#ffffb3")); // 배경색
         pager.setOffscreenPageLimit(2); //현재 페이지의 양쪽에 보유해야하는 페이지 수를 설정 (상황에 맞게 사용하시면 됩니다.)
         tabLayout.setupWithViewPager(pager); //텝레이아웃과 뷰페이저를 연결
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(),this)); //뷰페이저 어뎁터 설정 연결

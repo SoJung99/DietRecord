@@ -24,6 +24,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:tabGravity="fill"
         app:tabIndicatorColor="@color/colorPrimary"
+        app:tabSelectedTextColor="#ff8080"
         app:tabMode="fixed">
 
     </com.google.android.material.tabs.TabLayout>

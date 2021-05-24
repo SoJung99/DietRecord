@@ -14,12 +14,14 @@
             android:id="@+id/button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#c2c2d6"
             android:text="일간" />
 
         <Button
             android:id="@+id/button2"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#c2c2d6"
             android:text="주간" />
 
     </TableRow>
@@ -47,18 +49,21 @@
             android:id="@+id/button3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#c2c2d6"
             android:text="몸무게" />
 
         <Button
             android:id="@+id/button4"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#c2c2d6"
             android:text="운동칼로리" />
 
         <Button
             android:id="@+id/button5"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:backgroundTint="#c2c2d6"
             android:text="음식칼로리" />
     </TableRow>
 
