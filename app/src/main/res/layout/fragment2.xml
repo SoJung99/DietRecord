@@ -10,140 +10,40 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:orientation="horizontal"
-        android:layout_weight="1.8" >
+        android:gravity="center"
+        android:layout_weight="1.5" >
 
         <Button
-            android:id="@+id/btn_info"
-            android:layout_width="wrap_content"
+            android:id="@+id/btn_ex"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginLeft="8dp"
-            android:layout_marginRight="20dp"
-            android:text="음식별 정보 보기"
+            android:text="음성인식 예시"
+            android:textColor="#000000"
+            android:backgroundTint="#c2c2d6"
+            app:cornerRadius="0dp"/>
+
+        <Button
+            android:id="@+id/btn_info"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:text="음식별 정보"
             android:textColor="#000000"
             android:backgroundTint="#c2c2d6"
             app:cornerRadius="0dp"/>
 
         <Button
             android:id="@+id/btn_recom"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:layout_marginRight="8dp"
-            android:layout_marginLeft="20dp"
-            android:onClick="recomClick"
-            android:text="추천 식단 보기"
-            android:textColor="#000000"
-            android:backgroundTint="#c2c2d6"
-            app:cornerRadius="0dp"/>
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3.2"
-        android:orientation="vertical">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1">
-            <Button
-                android:id="@+id/btn_ex"
-                android:layout_width="wrap_content"
-                android:layout_height="40dp"
-                android:layout_marginLeft="8dp"
-                android:onClick="exClick"
-                android:text="음성인식 예시 보기"
-                android:textColor="#000000"
-                android:backgroundTint="#c2c2d6"
-                app:cornerRadius="0dp"/>
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1.3"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical"
-            android:background="@drawable/border">
-
-            <Button
-                android:id="@+id/btn_voice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="8dp"
-                android:text="음성인식"
-                android:textColor="#000000"
-                android:backgroundTint="#c2c2d6"
-                app:cornerRadius="0dp"/>
-
-
-            <TextView
-                android:id="@+id/textView_voice"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="(식사)/(음식 종류)/(양)"
-                />
-
-            <Button
-                android:id="@+id/btn_voiceAdd"
-                android:layout_width="40dp"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="8dp"
-                android:onClick="voiceAddClick"
-                android:text="+"
-                android:textColor="#000000"
-                android:textSize="20sp"
-                android:backgroundTint="#c2c2d6"
-                app:cornerRadius="0dp"/>
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:orientation="horizontal"
-        android:gravity="center"
-        android:layout_weight="2"
-        android:background="@drawable/border">
-
-        <Spinner
-            android:id="@+id/spinner"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.1"
-            android:layout_marginLeft="8dp"
-            android:textColor="#000000"
-            android:entries="@array/itemTime">
-        </Spinner>
-
-        <Spinner
-            android:id="@+id/spinner2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1.5"
-            android:entries="@array/itemKind">
-        </Spinner>
-
-        <Spinner
-            android:id="@+id/spinner3"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
-            android:entries="@array/itemAmount">
-        </Spinner>
-
-        <Button
-            android:id="@+id/btn_add"
-            android:layout_width="40dp"
-            android:layout_height="wrap_content"
             android:layout_marginRight="8dp"
-            android:text="+"
+            android:text="추천 식단"
             android:textColor="#000000"
-            android:textSize="20sp"
             android:backgroundTint="#c2c2d6"
             app:cornerRadius="0dp"/>
     </LinearLayout>
@@ -153,7 +53,124 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
-        <!--android:background="@drawable/border">-->
+        <RadioGroup
+            android:id="@+id/rg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@drawable/border">
+            <RadioButton
+                android:id="@+id/rb1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="아침"/>
+            <RadioButton
+                android:id="@+id/rb2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="점심"/>
+            <RadioButton
+                android:id="@+id/rb3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="8dp"
+                android:layout_marginRight="8dp"
+                android:text="저녁"/>
+        </RadioGroup>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:orientation="horizontal"
+                    android:gravity="center_vertical"
+                    android:background="@drawable/border">
+
+                    <Button
+                        android:id="@+id/btn_voice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:text="음성인식"
+                        android:textColor="#000000"
+                        android:backgroundTint="#c2c2d6"
+                        app:cornerRadius="0dp"/>
+
+
+                    <TextView
+                        android:id="@+id/textView_voice"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="(음식 종류)/(양)"
+                        />
+
+                    <Button
+                        android:id="@+id/btn_voiceAdd"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:text="+"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:backgroundTint="#c2c2d6"
+                        app:cornerRadius="0dp"/>
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:orientation="horizontal"
+                    android:gravity="center"
+                    android:layout_weight="1"
+                    android:background="@drawable/border">
+                    <Spinner
+                        android:id="@+id/spinner2"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="8dp"
+                        android:layout_weight="1"
+                        android:entries="@array/itemKind">
+                    </Spinner>
+
+                    <Spinner
+                        android:id="@+id/spinner3"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="0.6"
+                        android:entries="@array/itemAmount">
+                    </Spinner>
+
+                    <Button
+                        android:id="@+id/btn_add"
+                        android:layout_width="40dp"
+                        android:layout_height="wrap_content"
+                        android:layout_marginRight="8dp"
+                        android:text="+"
+                        android:textColor="#000000"
+                        android:textSize="20sp"
+                        android:backgroundTint="#c2c2d6"
+                        app:cornerRadius="0dp"/>
+                </LinearLayout>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

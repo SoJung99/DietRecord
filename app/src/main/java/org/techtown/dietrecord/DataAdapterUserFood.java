@@ -67,12 +67,12 @@ public class DataAdapterUserFood
         mDbHelper.close();
     }
 
-    public ArrayList<UserFood> getTableData()
+    public ArrayList<UserFood> getTableData() // 모두 불러오기
     {
         try
         {
             // Table 이름 -> antpool_bitcoin 불러오기
-            String sql ="SELECT * FROM " + TABLE_NAME;
+            String sql ="SELECT * FROM " + TABLE_NAME; //+ " WHERE 날짜 = '"+getDate()+"'";
 
             // 모델 넣을 리스트 생성
             ArrayList<UserFood> userList = new ArrayList<>();
@@ -92,16 +92,16 @@ public class DataAdapterUserFood
                     // TODO : Record 기술
                     // id, name, account, privateKey, secretKey, Comment
 
-                    user.setId(mCur.getInt(0));
+                    //user.setId(mCur.getInt(0));
                     //user.setMeal(mCur.getString(1));
-                    user.setFoodKind(mCur.getString(2));
+                    //user.setFoodKind(mCur.getString(2));
                     user.setFoodAmount(mCur.getFloat(3));
-                    user.setUNIT(mCur.getString(4));
+                    //user.setUNIT(mCur.getString(4));
                     user.setFoodCal(mCur.getFloat(5));
-                    //user.setCarb(mCur.getFloat(6));
-                    //user.setProt(mCur.getFloat(7));
-                    //user.setFat(mCur.getFloat(8));
-                    //user.setDate(mCur.getString(9));
+                    user.setCarb(mCur.getFloat(6));
+                    user.setProt(mCur.getFloat(7));
+                    user.setFat(mCur.getFloat(8));
+                    user.setDate(mCur.getInt(9));
 
                     // 리스트에 넣기
                     userList.add(user);
@@ -140,18 +140,12 @@ public class DataAdapterUserFood
                     user = new UserFood();
 
                     // TODO : Record 기술
-                    // id, name, account, privateKey, secretKey, Comment
                     //id,kind,amount,calories,unit
                     user.setId(mCur.getInt(0));
-                    //user.setMeal(mCur.getString(1));
                     user.setFoodKind(mCur.getString(2));
                     user.setFoodAmount(mCur.getFloat(3));
                     user.setUNIT(mCur.getString(4));
                     user.setFoodCal(mCur.getFloat(5));
-                    //user.setCarb(mCur.getFloat(6));
-                    //user.setProt(mCur.getFloat(7));
-                    //user.setFat(mCur.getFloat(8));
-                    //user.setDate(mCur.getString(9));
 
                     /*Cursor cur = mDb.rawQuery("SELECT * FROM 음식정보 WHERE 음식구분='"+mCur.getString(2)+"'", null);
                     if(cur!=null){
@@ -195,24 +189,12 @@ public class DataAdapterUserFood
                     user = new UserFood();
 
                     // TODO : Record 기술
-                    // id, name, account, privateKey, secretKey, Comment
                     //id,kind,amount,calories,unit
                     user.setId(mCur.getInt(0));
-                    //user.setMeal(mCur.getString(1));
                     user.setFoodKind(mCur.getString(2));
                     user.setFoodAmount(mCur.getFloat(3));
                     user.setUNIT(mCur.getString(4));
                     user.setFoodCal(mCur.getFloat(5));
-                    //user.setCarb(mCur.getFloat(6));
-                    //user.setProt(mCur.getFloat(7));
-                    //user.setFat(mCur.getFloat(8));
-                    //user.setDate(mCur.getString(9));
-
-                    /*Cursor cur = mDb.rawQuery("SELECT * FROM 음식정보 WHERE 음식구분='"+mCur.getString(2)+"'", null);
-                    if(cur!=null){
-                        user.setUNIT(cur.getString(5));
-                    }*/
-
                     // 리스트에 넣기
                     userList.add(user);
                 }
@@ -249,24 +231,12 @@ public class DataAdapterUserFood
                     user = new UserFood();
 
                     // TODO : Record 기술
-                    // id, name, account, privateKey, secretKey, Comment
                     //id,kind,amount,calories,unit
                     user.setId(mCur.getInt(0));
-                    //user.setMeal(mCur.getString(1));
                     user.setFoodKind(mCur.getString(2));
                     user.setFoodAmount(mCur.getFloat(3));
                     user.setUNIT(mCur.getString(4));
                     user.setFoodCal(mCur.getFloat(5));
-                    //user.setCarb(mCur.getFloat(6));
-                    //user.setProt(mCur.getFloat(7));
-                    //user.setFat(mCur.getFloat(8));
-                    //user.setDate(mCur.getString(9));
-
-                    /*Cursor cur = mDb.rawQuery("SELECT * FROM 음식정보 WHERE 음식구분='"+mCur.getString(2)+"'", null);
-                    if(cur!=null){
-                        user.setUNIT(cur.getString(5));
-                    }*/
-
                     // 리스트에 넣기
                     userList.add(user);
                 }
@@ -288,7 +258,7 @@ public class DataAdapterUserFood
         int day = cal.get(Calendar.DAY_OF_MONTH);
 
         int date = year*10000 + month*100 + day;
-        //Toast.makeText(MainActivity.this, "날짜: " + date, Toast.LENGTH_SHORT).show();
+
         return date;
     }
 
