@@ -14,7 +14,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
-
     <com.google.android.material.tabs.TabLayout
         android:id="@+id/main_tablayout"
         android:layout_width="match_parent"
@@ -23,8 +22,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:tabGravity="fill"
-        app:tabIndicatorColor="@color/colorPrimary"
-        app:tabSelectedTextColor="#ff8080"
+        app:tabSelectedTextColor="#ffff00"
+        app:tabRippleColor="#ff6666"
         app:tabMode="fixed">
 
     </com.google.android.material.tabs.TabLayout>
