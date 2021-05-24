@@ -64,7 +64,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
     Spinner ex_spinner, power_spinner;
     EditText time;
-    String[] ex_items = {"걷기","달리기","줄넘기","수영","사이클","파워워킹","런지",
+    String[] ex_items = {"걷기","뛰기","줄넘기","수영","사이클","파워워킹","런지",
             "스쿼트","윗몸일으키기","푸쉬업","등산","댄스","훌라후프","버피테스트","플랭크","팔벌려뛰기","풀업",
             "계단오르기","에어로빅","요가","딥스","벤치프레스","로잉머신","짐볼운동","복싱","케틀벨","농구","테니스","축구",
             "탁구"};
@@ -236,7 +236,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         if(view==voice){
             SpeechRecognizerClient.Builder builder = new SpeechRecognizerClient.Builder().
                     setServiceType(serviceType).
-                    setUserDictionary("걷기 상\n걷기 중\n걷기 하\n달리기 상\n달리기 중\n달리기 하\n줄넘기 상\n줄넘기 중\n줄넘기 하\n수영 상\n수영 중\n수영 하\n" +
+                    setUserDictionary("걷기 상\n걷기 중\n걷기 하\n뛰기 상\n뛰기 중\n뛰기 하\n줄넘기 상\n줄넘기 중\n줄넘기 하\n수영 상\n수영 중\n수영 하\n" +
                             "사이클 상\n사이클 중\n사이클 하\n요가 상\n요가 중\n요가 하\n런지 상\n런지 중\n런지 하\n스쿼트 상\n스쿼트 중\n스쿼트 하\n윗몸일으키기 상\n윗몸일으키기 중\n윗몸일으키기 하\n" +
                             "푸쉬업 상\n푸쉬업 중\n푸쉬업 하\n등산 상\n등산 중\n등산 하\n댄스 상\n댄스 중\n댄스 하\n훌라후프 상\n훌라후프 중\n훌라후프 하\n버피 상\n버피 중\n버피 하\n" +
                             "플랭크 상\n플랭크 중\n플랭크 하\n팔벌려뛰기 상\n팔벌려뛰기 중\n팔벌려뛰기 하\n풀업 상\n풀업 중\n풀업 하\n계단오르기 상\n계단오르기 중\n계단오르기 하\n" +
