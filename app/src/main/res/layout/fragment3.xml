@@ -108,7 +108,6 @@
             android:layout_height="49dp"
             android:layout_marginTop="12dp"
             android:backgroundTint="#c2c2d6"
-
             android:text="운동 정보 보기"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.965"
