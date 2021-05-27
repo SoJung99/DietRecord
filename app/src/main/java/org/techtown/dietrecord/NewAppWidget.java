@@ -64,6 +64,8 @@ public class NewAppWidget extends AppWidgetProvider implements SpeechRecognizeLi
 
     private static final String BTN1_CLICKED = "button1Click";
     private static final String BTN2_CLICKED = "button2Click";
+    private static final String P1 = "P1update";
+    private static final String P2 = "P2update";
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
                                 int appWidgetId) {
@@ -80,8 +82,8 @@ public class NewAppWidget extends AppWidgetProvider implements SpeechRecognizeLi
         /*
         // 여기부터 카카오 API
         if (ActivityCompat.checkSelfPermission(context, Manifest.permission.RECORD_AUDIO) != PackageManager.PERMISSION_GRANTED || ActivityCompat.checkSelfPermission(context, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-            if (ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.RECORD_AUDIO) && ActivityCompat.shouldShowRequestPermissionRationale((Activity) context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
-                ActivityCompat.requestPermissions((Activity) context, new String[] { Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
+            if (ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.RECORD_AUDIO) && ActivityCompat.shouldShowRequestPermissionRationale(context, Manifest.permission.WRITE_EXTERNAL_STORAGE)) {
+                ActivityCompat.requestPermissions(context, new String[] { Manifest.permission.RECORD_AUDIO, Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
             } else {
                 // 사용자가 거부하면서 다시 묻지 않기를 클릭.. 권한이 없다고 사용자에게 직접 알림.
             }
@@ -89,13 +91,12 @@ public class NewAppWidget extends AppWidgetProvider implements SpeechRecognizeLi
             //startUsingSpeechSDK();
         }
 
-
-        checkPermissions();*/
+*/
+        checkPermissions();
+        new SpeechRecognizerManager().getInstance().initializeLibrary(context);
 
         ComponentName widget = new ComponentName(context, NewAppWidget.class);
         RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
-
-
 
         appWidgetManager.updateAppWidget(widget, views);
 
@@ -128,12 +129,13 @@ public class NewAppWidget extends AppWidgetProvider implements SpeechRecognizeLi
         calendar = Calendar.getInstance();
         Integer date =calendar.get(Calendar.YEAR)*10000+(calendar.get(Calendar.MONTH)+1)*100+calendar.get(Calendar.DATE);
 
-        Cursor cur = database.rawQuery("SELECT * from 사용자정보 WHERE 날짜 = " + date, null);
+
+        Cursor cur = database.rawQuery("SELECT * from 사용자정보", null);
         cur.moveToFirst();
         views.setTextViewText(R.id.date,Integer.toString(date-cur.getInt(0)+1)+"일차");
 
         /*
-        cur = database.rawQuery("SELECT 칼로리 from 사용자정보", null);
+        cur = database.rawQuery("SELECT 칼로리 from 사용자정  WHERE 날짜 = " + date, null);
         cur.moveToFirst();
         views.setTextViewText(R.id.exercise, cur.getDouble(0)+" / 권장 운동 칼로리");
         */
@@ -147,6 +149,7 @@ public class NewAppWidget extends AppWidgetProvider implements SpeechRecognizeLi
 
         }
         else if(action.equals(BTN2_CLICKED)){   // 버튼 2 클릭되면 (운동 입력)
+            System.out.println("버튼2 클릭됨");
             String serviceType = SpeechRecognizerClient.SERVICE_TYPE_WORD;
             SpeechRecognizerClient.Builder builder = new SpeechRecognizerClient.Builder().
                     setServiceType(serviceType).
@@ -169,6 +172,10 @@ public class NewAppWidget extends AppWidgetProvider implements SpeechRecognizeLi
 
         views.setOnClickPendingIntent(R.id.button, getPendingSelfIntent(context, BTN1_CLICKED));
         views.setOnClickPendingIntent(R.id.button2, getPendingSelfIntent(context, BTN2_CLICKED));
+
+
+        //views.setProgressBar(R.id.food,2000,1200,false);
+        //views.setProgressBar(R.id.exer,1000,800,false);
 
         // 화면 초기화
         ComponentName cpName = new ComponentName(context, NewAppWidget.class);
@@ -218,6 +225,7 @@ public class NewAppWidget extends AppWidgetProvider implements SpeechRecognizeLi
 
     @Override
     public void onResults(Bundle results) {
+        System.out.println("onResults로 넘어옴");
         final StringBuilder builder = new StringBuilder();
         ArrayList<String> texts = results.getStringArrayList(SpeechRecognizerClient.KEY_RECOGNITION_RESULTS);
 

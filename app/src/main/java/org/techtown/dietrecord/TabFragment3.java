@@ -11,9 +11,11 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,6 +51,8 @@ import java.util.Calendar;
 import java.util.Iterator;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
 
@@ -122,7 +126,13 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             });
         }
     }
-
+    final Handler handler = new Handler(Looper.getMainLooper())
+    {
+        public void handleMessage(Message msg)
+        {
+            listupdate();
+        }
+    };
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -218,9 +228,57 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         new SpeechRecognizerManager().getInstance().initializeLibrary(getActivity());
 
 
+        /*Timer timer = new Timer();
+        TimerTask timerTask = new TimerTask() {
+            @Override public void run() {
+                listupdate();
+            }
+        };
+        timer.schedule(timerTask, 0, 60*1000); // 1분 주기*/
+
+
+        new Thread()
+        {
+            public void run()
+            {
+                while (true) {
+                    Message msg = handler.obtainMessage();
+                    handler.sendMessage(msg);
+                    try {
+                        Thread.sleep(1000*10);
+                    } catch (InterruptedException e)
+                    { e.printStackTrace(); }
+                }
+            }
+
+        }.start();
+        /*new Thread(new Runnable() {
+            @Override public void run() {
+                while (true) {
+                    listupdate();
+                    try {
+                        Thread.sleep(1000*10);
+                    } catch (InterruptedException e)
+                    { e.printStackTrace(); }
+                }
+            }
+        }).start();*/
+
+
+
+
         return v;
     }
 
+    public void listupdate(){
+        list = mDbHelper.getTableData();
+
+        adapter = new ExerciseAdapter(list);
+        recyclerView.setAdapter(adapter);
+        adapter.setOnClickListener(this);
+        adapter.notifyDataSetChanged();
+        allcal.setText(adapter.getAllCalories()+"kcals");
+    }
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
