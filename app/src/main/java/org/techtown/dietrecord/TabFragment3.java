@@ -228,13 +228,6 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         new SpeechRecognizerManager().getInstance().initializeLibrary(getActivity());
 
 
-        /*Timer timer = new Timer();
-        TimerTask timerTask = new TimerTask() {
-            @Override public void run() {
-                listupdate();
-            }
-        };
-        timer.schedule(timerTask, 0, 60*1000); // 1분 주기*/
 
 
         new Thread()
@@ -245,7 +238,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                     Message msg = handler.obtainMessage();
                     handler.sendMessage(msg);
                     try {
-                        Thread.sleep(1000*10);
+                        Thread.sleep(10000);
                     } catch (InterruptedException e)
                     { e.printStackTrace(); }
                 }

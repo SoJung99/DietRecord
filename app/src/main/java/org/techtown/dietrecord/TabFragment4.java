@@ -35,6 +35,7 @@ import com.google.android.material.tabs.TabLayout;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +53,7 @@ public class TabFragment4 extends Fragment{
     SQLiteDatabase database ;
 
     float day = 1;
-    boolean kcal_switch = true;
+    int attribute_switch = 1;
     public void intitLoadDB(){
         mDbHelper = new DataAdapter(getActivity().getApplicationContext());
         mDbHelper.createDatabase();
@@ -94,6 +95,7 @@ public class TabFragment4 extends Fragment{
 
         button1 = (Button) view.findViewById(R.id.button);
         button2 = (Button) view.findViewById(R.id.button2);
+        button3 = (Button) view.findViewById(R.id.button3);
         button4 = (Button) view.findViewById(R.id.button4);
         button5 = (Button) view.findViewById(R.id.button5);
 
@@ -101,10 +103,11 @@ public class TabFragment4 extends Fragment{
 
 
         for(int i = 0; i <= 6; i++) {
-            Date date = new Date();
-            Long date_long = date.getTime() - (6-i) * (24*60*60*1000);
             SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-            String time = format.format(date_long).substring(0, 10).replaceAll(" ", "");
+            Calendar calendar = Calendar.getInstance();
+            calendar.add(Calendar.DATE, -(6-i));  // 오늘 날짜에서 하루를 뺌.
+            String date = format.format(calendar.getTime());
+            String time = date.substring(0, 10).replaceAll(" ", "");
             Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자운동 where 날짜 = " + Integer.parseInt(time) + "", null);
             cur.moveToNext();
             values.add(new Entry(i-6, cur.getFloat(0)));
@@ -152,24 +155,38 @@ public class TabFragment4 extends Fragment{
             public void onClick(View v) {
                 day = 1;
                 ArrayList<Entry> values = new ArrayList<>();
-                if(kcal_switch) {
+                if(attribute_switch == 1) {
                     for(int i = 0; i <= 6; i++) {
-                        Date date = new Date();
-                        Long date_long = date.getTime() - (6-i) * (24*60*60*1000);
                         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        String time = format.format(date_long).substring(0, 10).replaceAll(" ", "");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DATE, -(6-i));  // 오늘 날짜에서 하루를 뺌.
+                        String date = format.format(calendar.getTime());
+                        String time = date.substring(0, 10).replaceAll(" ", "");
                         Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자운동 where 날짜 = " + Integer.parseInt(time) + "", null);
+                        cur.moveToNext();
+                        values.add(new Entry(i-6, cur.getFloat(0)));
+                    }
+                }
+                else if(attribute_switch == 2){
+                    for(int i = 0; i <= 6; i++) {
+                        SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DATE, -(6-i));  // 오늘 날짜에서 하루를 뺌.
+                        String date = format.format(calendar.getTime());
+                        String time = date.substring(0, 10).replaceAll(" ", "");
+                        Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자식단 where 날짜 = " + Integer.parseInt(time) + "", null);
                         cur.moveToNext();
                         values.add(new Entry(i-6, cur.getFloat(0)));
                     }
                 }
                 else {
                     for(int i = 0; i <= 6; i++) {
-                        Date date = new Date();
-                        Long date_long = date.getTime() - (6-i) * (24*60*60*1000);
                         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        String time = format.format(date_long).substring(0, 10).replaceAll(" ", "");
-                        Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자식단 where 날짜 = " + Integer.parseInt(time) + "", null);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DATE, -(6-i));  // 오늘 날짜에서 하루를 뺌.
+                        String date = format.format(calendar.getTime());
+                        String time = date.substring(0, 10).replaceAll(" ", "");
+                        Cursor cur = database.rawQuery("SELECT sum(몸무게) FROM 사용자정보 where 날짜 = " + Integer.parseInt(time) + "", null);
                         cur.moveToNext();
                         values.add(new Entry(i-6, cur.getFloat(0)));
                     }
@@ -209,11 +226,14 @@ public class TabFragment4 extends Fragment{
                 // set data
                 chart.setData(data);
                 chart.getData().setValueTextSize(15);
-                if(kcal_switch) {
+                if(attribute_switch == 1) {
                     chart.getDescription().setText("일간 운동칼로리");
                 }
-                else {
+                else if(attribute_switch == 2){
                     chart.getDescription().setText("일간 음식칼로리");
+                }
+                else {
+                    chart.getDescription().setText("일간 몸무게");
                 }
                 chart.invalidate();
             }
@@ -224,28 +244,50 @@ public class TabFragment4 extends Fragment{
             public void onClick(View v) {
                 day = 7;
                 ArrayList<Entry> values = new ArrayList<>();
-                if(kcal_switch) {
+                if(attribute_switch == 1) {
                     for(int i = 0; i <= 6; i++) {
-                        Date date = new Date();
-                        Long date_long1 = date.getTime() - (6-i) * 7 * (24*60*60*1000);
-                        Long date_long2 = date.getTime() - (7-i) * 7 * (24*60*60*1000);
                         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        String time1 = format.format(date_long1).substring(0, 10).replaceAll(" ", "");
-                        String time2 = format.format(date_long2).substring(0, 10).replaceAll(" ", "");
+                        Calendar calendar1 = Calendar.getInstance();
+                        Calendar calendar2 = Calendar.getInstance();
+                        calendar1.add(Calendar.DATE, - (6-i) * 7);
+                        calendar2.add(Calendar.DATE, - (7-i) * 7);
+                        String date1 = format.format(calendar1.getTime());
+                        String date2 = format.format(calendar2.getTime());
+                        String time1 = date1.substring(0, 10).replaceAll(" ", "");
+                        String time2 = date2.substring(0, 10).replaceAll(" ", "");
                         Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자운동 where 날짜 <= "+Integer.parseInt(time1)+" AND 날짜 > "+Integer.parseInt(time2)+"", null);
+                        cur.moveToNext();
+                        values.add(new Entry(i-6, cur.getFloat(0)));
+                    }
+                }
+                else if (attribute_switch == 2){
+                    for(int i = 0; i <= 6; i++) {
+                        SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
+                        Calendar calendar1 = Calendar.getInstance();
+                        Calendar calendar2 = Calendar.getInstance();
+                        calendar1.add(Calendar.DATE, - (6-i) * 7);
+                        calendar2.add(Calendar.DATE, - (7-i) * 7);
+                        String date1 = format.format(calendar1.getTime());
+                        String date2 = format.format(calendar2.getTime());
+                        String time1 = date1.substring(0, 10).replaceAll(" ", "");
+                        String time2 = date2.substring(0, 10).replaceAll(" ", "");
+                        Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자식단 where 날짜 <= "+Integer.parseInt(time1)+" AND 날짜 > "+Integer.parseInt(time2)+"", null);
                         cur.moveToNext();
                         values.add(new Entry(i-6, cur.getFloat(0)));
                     }
                 }
                 else {
                     for(int i = 0; i <= 6; i++) {
-                        Date date = new Date();
-                        Long date_long1 = date.getTime() - (6-i) * 7 * (24*60*60*1000);
-                        Long date_long2 = date.getTime() - (7-i) * 7 * (24*60*60*1000);
                         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        String time1 = format.format(date_long1).substring(0, 10).replaceAll(" ", "");
-                        String time2 = format.format(date_long2).substring(0, 10).replaceAll(" ", "");
-                        Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자식단 where 날짜 <= "+Integer.parseInt(time1)+" AND 날짜 > "+Integer.parseInt(time2)+"", null);
+                        Calendar calendar1 = Calendar.getInstance();
+                        Calendar calendar2 = Calendar.getInstance();
+                        calendar1.add(Calendar.DATE, - (6-i) * 7);
+                        calendar2.add(Calendar.DATE, - (7-i) * 7);
+                        String date1 = format.format(calendar1.getTime());
+                        String date2 = format.format(calendar2.getTime());
+                        String time1 = date1.substring(0, 10).replaceAll(" ", "");
+                        String time2 = date2.substring(0, 10).replaceAll(" ", "");
+                        Cursor cur = database.rawQuery("SELECT avg(몸무게) FROM 사용자정보 where 날짜 <= "+Integer.parseInt(time1)+" AND 날짜 > "+Integer.parseInt(time2)+"", null);
                         cur.moveToNext();
                         values.add(new Entry(i-6, cur.getFloat(0)));
                     }
@@ -283,27 +325,32 @@ public class TabFragment4 extends Fragment{
                 // set data
                 chart.setData(data);
                 chart.getData().setValueTextSize(15);
-                if(kcal_switch) {
+                if(attribute_switch == 1) {
                     chart.getDescription().setText("주간 운동칼로리");
                 }
-                else {
+                else if(attribute_switch == 2){
                     chart.getDescription().setText("주간 음식칼로리");
+                }
+                else {
+                    chart.getDescription().setText("주간 몸무게평균");
                 }
                 chart.invalidate();
             }
         });
 
-        button4.setOnClickListener(new View.OnClickListener() {
+
+        button3.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kcal_switch = true;
+                attribute_switch = 1;
                 ArrayList<Entry> values = new ArrayList<>();
                 if(day == 1) {
                     for(int i = 0; i <= 6; i++) {
-                        Date date = new Date();
-                        Long date_long = date.getTime() - (6-i) * (24*60*60*1000);
                         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        String time = format.format(date_long).substring(0, 10).replaceAll(" ", "");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DATE, -(6-i));  // 오늘 날짜에서 하루를 뺌.
+                        String date = format.format(calendar.getTime());
+                        String time = date.substring(0, 10).replaceAll(" ", "");
                         Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자운동 where 날짜 = " + Integer.parseInt(time) + "", null);
 
                         cur.moveToNext();
@@ -312,12 +359,15 @@ public class TabFragment4 extends Fragment{
                 }
                 else {
                     for(int i = 0; i <= 6; i++) {
-                        Date date = new Date();
-                        Long date_long1 = date.getTime() - (6-i) * 7 * (24*60*60*1000);
-                        Long date_long2 = date.getTime() - (7-i) * 7 * (24*60*60*1000);
                         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        String time1 = format.format(date_long1).substring(0, 10).replaceAll(" ", "");
-                        String time2 = format.format(date_long2).substring(0, 10).replaceAll(" ", "");
+                        Calendar calendar1 = Calendar.getInstance();
+                        Calendar calendar2 = Calendar.getInstance();
+                        calendar1.add(Calendar.DATE, - (6-i) * 7);
+                        calendar2.add(Calendar.DATE, - (7-i) * 7);
+                        String date1 = format.format(calendar1.getTime());
+                        String date2 = format.format(calendar2.getTime());
+                        String time1 = date1.substring(0, 10).replaceAll(" ", "");
+                        String time2 = date2.substring(0, 10).replaceAll(" ", "");
                         Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자운동 where 날짜 <= "+Integer.parseInt(time1)+" AND 날짜 > "+Integer.parseInt(time2)+"", null);
                         cur.moveToNext();
                         values.add(new Entry(i-6, cur.getFloat(0)));
@@ -369,17 +419,18 @@ public class TabFragment4 extends Fragment{
             }
         });
 
-        button5.setOnClickListener(new View.OnClickListener() {
+        button4.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                kcal_switch = false;
+                attribute_switch = 2;
                 ArrayList<Entry> values = new ArrayList<>();
                 if(day == 1) {
                     for(int i = 0; i <= 6; i++) {
-                        Date date = new Date();
-                        Long date_long = date.getTime() - (6-i) * (24*60*60*1000);
                         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        String time = format.format(date_long).substring(0, 10).replaceAll(" ", "");
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DATE, -(6-i));  // 오늘 날짜에서 하루를 뺌.
+                        String date = format.format(calendar.getTime());
+                        String time = date.substring(0, 10).replaceAll(" ", "");
                         Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자식단 where 날짜 = " + Integer.parseInt(time) + "", null);
                         cur.moveToNext();
                         values.add(new Entry(i-6, cur.getFloat(0)));
@@ -387,12 +438,15 @@ public class TabFragment4 extends Fragment{
                 }
                 else {
                     for(int i = 0; i <= 6; i++) {
-                        Date date = new Date();
-                        Long date_long1 = date.getTime() - (6-i) * 7 * (24*60*60*1000);
-                        Long date_long2 = date.getTime() - (7-i) * 7 * (24*60*60*1000);
                         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        String time1 = format.format(date_long1).substring(0, 10).replaceAll(" ", "");
-                        String time2 = format.format(date_long2).substring(0, 10).replaceAll(" ", "");
+                        Calendar calendar1 = Calendar.getInstance();
+                        Calendar calendar2 = Calendar.getInstance();
+                        calendar1.add(Calendar.DATE, - (6-i) * 7);
+                        calendar2.add(Calendar.DATE, - (7-i) * 7);
+                        String date1 = format.format(calendar1.getTime());
+                        String date2 = format.format(calendar2.getTime());
+                        String time1 = date1.substring(0, 10).replaceAll(" ", "");
+                        String time2 = date2.substring(0, 10).replaceAll(" ", "");
                         Cursor cur = database.rawQuery("SELECT sum(칼로리) FROM 사용자식단 where 날짜 <= "+Integer.parseInt(time1)+" AND 날짜 > "+Integer.parseInt(time2)+"", null);
                         cur.moveToNext();
                         values.add(new Entry(i-6, cur.getFloat(0)));
@@ -416,7 +470,7 @@ public class TabFragment4 extends Fragment{
                 legend.setTextColor(Color.BLACK);
                 legend.setTextSize(15);
                 legend.setForm(Legend.LegendForm.CIRCLE);
-                int[] colorClassArray = new int[] {Color.RED, Color.CYAN};
+                int[] colorClassArray = new int[] {Color.RED, Color.BLUE};
                 String[] legendName = {"kcal" , "Day"};
                 if(day == 7) {
                     legendName[1] = "Week";
@@ -439,6 +493,85 @@ public class TabFragment4 extends Fragment{
                 }
                 else {
                     chart.getDescription().setText("주간 음식칼로리");
+                }
+                chart.invalidate();
+            }
+        });
+
+        button5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                attribute_switch = 3;
+                ArrayList<Entry> values = new ArrayList<>();
+                if(day == 1) {
+                    for(int i = 0; i <= 6; i++) {
+                        SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.add(Calendar.DATE, -(6-i));  // 오늘 날짜에서 하루를 뺌.
+                        String date = format.format(calendar.getTime());
+                        String time = date.substring(0, 10).replaceAll(" ", "");
+                        Cursor cur = database.rawQuery("SELECT sum(몸무게) FROM 사용자정보 where 날짜 = " + Integer.parseInt(time) + "", null);
+                        cur.moveToNext();
+                        values.add(new Entry(i-6, cur.getFloat(0)));
+                    }
+                }
+                else {
+                    for(int i = 0; i <= 6; i++) {
+                        SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
+                        Calendar calendar1 = Calendar.getInstance();
+                        Calendar calendar2 = Calendar.getInstance();
+                        calendar1.add(Calendar.DATE, - (6-i) * 7);
+                        calendar2.add(Calendar.DATE, - (7-i) * 7);
+                        String date1 = format.format(calendar1.getTime());
+                        String date2 = format.format(calendar2.getTime());
+                        String time1 = date1.substring(0, 10).replaceAll(" ", "");
+                        String time2 = date2.substring(0, 10).replaceAll(" ", "");
+                        Cursor cur = database.rawQuery("SELECT avg(몸무게) FROM 사용자정보 where 날짜 <= "+Integer.parseInt(time1)+" AND 날짜 > "+Integer.parseInt(time2)+"", null);
+                        cur.moveToNext();
+                        values.add(new Entry(i-6, cur.getFloat(0)));
+                    }
+                }
+
+                LineDataSet set1;
+                set1 = new LineDataSet(values, null);
+                ArrayList<ILineDataSet> dataSets = new ArrayList<>();
+                dataSets.add(set1); // add the data sets
+
+                // create a data object with the data sets
+                LineData data = new LineData(dataSets);
+
+                // black lines and points
+                set1.setColor(Color.BLACK);
+                set1.setCircleColor(Color.RED);
+
+                Legend legend = chart.getLegend();
+                legend.setEnabled(true);
+                legend.setTextColor(Color.BLACK);
+                legend.setTextSize(15);
+                legend.setForm(Legend.LegendForm.CIRCLE);
+                int[] colorClassArray = new int[] {Color.RED, Color.BLUE};
+                String[] legendName = {"kcal" , "Day"};
+                if(day == 7) {
+                    legendName[1] = "Week";
+                }
+                LegendEntry[] legendEntries = new LegendEntry[2];
+
+                for(int i=0;i<legendEntries.length;i++) {
+                    LegendEntry entry = new LegendEntry();
+                    entry.formColor = colorClassArray[i];
+                    entry.label = String.valueOf(legendName[i]);
+                    legendEntries[i] = entry;
+                }
+                legend.setCustom(legendEntries);
+
+                // set data
+                chart.setData(data);
+                chart.getData().setValueTextSize(15);
+                if(day == 1) {
+                    chart.getDescription().setText("일간 몸무게");
+                }
+                else {
+                    chart.getDescription().setText("주간 몸무게평균");
                 }
                 chart.invalidate();
             }

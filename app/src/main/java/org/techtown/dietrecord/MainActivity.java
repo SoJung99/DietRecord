@@ -1,8 +1,12 @@
 package org.techtown.dietrecord;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -14,7 +18,32 @@ import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.material.tabs.TabLayout;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+
+    ArrayList<ExerciseData> list;
+    DataAdapter mDbHelper;
+    DataBaseHelper dbHelper;
+    SQLiteDatabase database;
+
+    public void intitLoadDB(){
+        mDbHelper = new DataAdapter(this.getApplicationContext());
+        mDbHelper.createDatabase();
+        mDbHelper.open();
+
+        dbHelper = new DataBaseHelper(this.getApplicationContext());
+        dbHelper.openDataBase();
+        dbHelper.close();
+        database = dbHelper.getWritableDatabase();
+
+        list = mDbHelper.getTableData();
+
+        // mDbHelper.close();
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -25,6 +54,25 @@ public class MainActivity extends AppCompatActivity {
         ViewPager pager = findViewById(R.id.main_viewPager);
         TabLayout tabLayout = findViewById(R.id.main_tablayout);
 
+        // 앱 최초 실행시 작업
+        SharedPreferences pref = getSharedPreferences("isFirst", Activity.MODE_PRIVATE);
+        boolean first = pref.getBoolean("isFirst", false);
+        if(first==false){
+            SharedPreferences.Editor editor = pref.edit();
+            editor.putBoolean("isFirst",true);
+            editor.commit();
+
+            intitLoadDB();
+
+            SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
+            Calendar calendar = Calendar.getInstance();
+            String date = format.format(calendar.getTime());
+            String time = date.substring(0, 10).replaceAll(" ", "");
+            int today = Integer.parseInt(time);
+
+            String sql = "INSERT INTO 사용자정보 (날짜, 성별, 나이, 키, 몸무게, 소모칼로리, 섭취칼로리) VALUES ("+today+", '"+'-'+"', "+0+", "+0+", "+0+", "+0+", "+0+")";
+            database.execSQL(sql);
+        }
 
 
         tabLayout.getChildAt(0).setBackgroundColor(Color.parseColor("#ff8080")); // 배경색
@@ -32,9 +80,9 @@ public class MainActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(pager); //텝레이아웃과 뷰페이저를 연결
         pager.setAdapter(new PageAdapter(getSupportFragmentManager(),this)); //뷰페이저 어뎁터 설정 연결
 
-
     }
-    
+
+
     static class PageAdapter extends FragmentStatePagerAdapter { //뷰 페이저 어뎁터
 
 
@@ -53,8 +101,10 @@ public class MainActivity extends AppCompatActivity {
                 return new TabFragment2();
             } else if (position == 2){
                 return new TabFragment3();
-            } else {
+            } else if (position == 3){
                 return new TabFragment4();
+            } else{
+                return null;
             }
 
         }
@@ -74,8 +124,10 @@ public class MainActivity extends AppCompatActivity {
                 return "식단";
             } else if(position == 2){
                 return "운동";
-            } else{
+            } else if(position == 3){
                 return "통계";
+            } else {
+                return null;
             }
         }
     }
