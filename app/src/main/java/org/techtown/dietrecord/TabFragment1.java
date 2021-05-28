@@ -70,8 +70,10 @@ import java.util.concurrent.TimeUnit;
 
 import static androidx.viewpager.widget.PagerAdapter.POSITION_NONE;
 
+
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class TabFragment1 extends Fragment {
+
 
     private SignInButton signInButton; // 구글 로그인 버튼
     private GoogleSignInClient mGoogleSignInClient;
