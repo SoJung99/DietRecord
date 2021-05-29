@@ -2,7 +2,11 @@ package org.techtown.dietrecord;
 
 import android.Manifest;
 import android.app.Application;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -69,6 +73,22 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
     DataAdapterUserFood mDbHelper;
     DataBaseHelper dbHelper;
     SQLiteDatabase database ;
+
+
+    public void updateWidget(String text){ //!!
+        //액티비티와 widget간의 데이터 전달 매개체로 SharePrefereneces를 사용합니다. 코코아 프레임워크의 NSUserDefaults에 해당합니다.
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        //에디터를 사용해 editText1에 있는 문자열을 textBox라는 이름으로 Sharepreferences에 저장합니다.
+        editor.putString("textBox", text);
+        editor.commit();
+        //Widget에게 값이 변경되었으니 업데이트하라는 메시지를 Broadcast를 통해서 전달합니다.
+        Intent intent = new Intent(getActivity(), DietWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), DietWidget.class)));
+        getActivity().sendBroadcast(intent);
+    }
+
 
     private void initLoadDB() {
         mDbHelper = new DataAdapterUserFood(getActivity().getApplicationContext());
@@ -193,6 +213,8 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                         }
                         sumC.setText((recyclerADAPTER.SumCalories(LIST) + recyclerADAPTER2.SumCalories(LIST2) + recyclerADAPTER3.SumCalories(LIST3)) + "kcal");
                         voiceReset();
+                        // 위젯 업데이트
+                        updateWidget(sumC.getText().toString());
                     }
                 }
             }
@@ -246,6 +268,9 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                         sumC3.setText(recyclerADAPTER3.SumCalories(LIST3)+"kcal");
                     }
                     sumC.setText((recyclerADAPTER.SumCalories(LIST)+recyclerADAPTER2.SumCalories(LIST2)+recyclerADAPTER3.SumCalories(LIST3))+"kcal");
+
+                    // 위젯 업데이트
+                    updateWidget(sumC.getText().toString());
                 }
 
             }
@@ -266,6 +291,10 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                                 recyclerADAPTER.notifyDataSetChanged();
                                 sumC1.setText(recyclerADAPTER.SumCalories(LIST)+"kcal");
                                 sumC.setText((recyclerADAPTER.SumCalories(LIST)+recyclerADAPTER2.SumCalories(LIST2)+recyclerADAPTER3.SumCalories(LIST3))+"kcal");
+
+                                // 위젯 업데이트
+                                updateWidget(sumC.getText().toString());
+
                             }
                         })
                         .setNeutralButton("아니오", new DialogInterface.OnClickListener() {

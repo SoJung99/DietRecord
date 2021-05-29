@@ -3,9 +3,12 @@ package org.techtown.dietrecord;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -90,6 +93,18 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     DataAdapter mDbHelper;
     DataBaseHelper dbHelper;
     SQLiteDatabase database ;
+
+    public void updateWidget(String text){ //!!
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("textBox2", text);
+        editor.commit();
+        Intent intent = new Intent(getActivity(), DietWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), DietWidget.class)));
+        getActivity().sendBroadcast(intent);
+    }
+
 
     public void intitLoadDB(){
         mDbHelper = new DataAdapter(getActivity().getApplicationContext());
@@ -245,20 +260,6 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             }
 
         }.start();
-        /*new Thread(new Runnable() {
-            @Override public void run() {
-                while (true) {
-                    listupdate();
-                    try {
-                        Thread.sleep(1000*10);
-                    } catch (InterruptedException e)
-                    { e.printStackTrace(); }
-                }
-            }
-        }).start();*/
-
-
-
 
         return v;
     }
@@ -350,6 +351,9 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             adapter.setOnClickListener(this);
             adapter.notifyDataSetChanged();
             allcal.setText(adapter.getAllCalories()+"kcals");
+
+            // 위젯 업데이트
+            updateWidget(allcal.getText().toString());
         }
         else if(view==info){
             LayoutInflater inflater = (LayoutInflater) getActivity().getApplicationContext().getSystemService(LAYOUT_INFLATER_SERVICE);
@@ -394,7 +398,8 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 adapter.notifyDataSetChanged();
                 allcal.setText(adapter.getAllCalories()+"kcals");
 
-
+                // 위젯 업데이트
+                updateWidget(allcal.getText().toString());
             }
         }
 
@@ -427,6 +432,9 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         adapter.setOnClickListener(this);
         adapter.notifyDataSetChanged();
         allcal.setText(adapter.getAllCalories()+"kcals");
+
+        // 위젯 업데이트
+        updateWidget(allcal.getText().toString());
 
     }
     @Override
