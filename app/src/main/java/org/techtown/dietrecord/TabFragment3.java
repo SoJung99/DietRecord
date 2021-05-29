@@ -3,9 +3,12 @@ package org.techtown.dietrecord;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Application;
+import android.appwidget.AppWidgetManager;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
@@ -195,6 +198,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         adapter.setOnClickListener(this);
 
         allcal.setText(adapter.getAllCalories()+"kcals");
+        updateWidget(allcal.getText().toString());//!!
 
 
         // 여기부터 카카오 API
@@ -215,6 +219,19 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
 
         return v;
     }
+
+    //!!
+    public void updateWidget(String text){
+        SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString("textBox2", text);
+        editor.commit();
+        Intent intent = new Intent(getActivity(), NewAppWidget.class);
+        intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), NewAppWidget.class)));
+        getActivity().sendBroadcast(intent);
+    }
+    //!!
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
@@ -287,6 +304,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             adapter.setOnClickListener(this);
             adapter.notifyDataSetChanged();
             allcal.setText(adapter.getAllCalories()+"kcals");
+            updateWidget(allcal.getText().toString());//!!
         }
         else if(view==info){
             new AlertDialog.Builder(getActivity()).setTitle("운동 입력 정보")
@@ -329,6 +347,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 adapter.setOnClickListener(this);
                 adapter.notifyDataSetChanged();
                 allcal.setText(adapter.getAllCalories()+"kcals");
+                updateWidget(allcal.getText().toString());//!!
 
 
             }
@@ -363,6 +382,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         adapter.setOnClickListener(this);
         adapter.notifyDataSetChanged();
         allcal.setText(adapter.getAllCalories()+"kcals");
+        updateWidget(allcal.getText().toString());//!!
 
     }
     @Override
