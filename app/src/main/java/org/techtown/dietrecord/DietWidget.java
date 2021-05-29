@@ -43,32 +43,23 @@ public class DietWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-
-        initLoadDB(context);        // 데이터베이스 연결
-
-        ComponentName widget = new ComponentName(context, DietWidget.class);
-        RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.diet_widget);
-
-        Cursor cur = database.rawQuery("SELECT 날짜 FROM 사용자정보",null);
-        cur.moveToFirst();
-
-        // 오늘 날짜를 Int형으로 20210528 형태로 받아옴.
-        calendar = Calendar.getInstance();
-        int date =calendar.get(Calendar.YEAR)*10000+(calendar.get(Calendar.MONTH)+1)*100+calendar.get(Calendar.DATE);
-
-        // 지금 몇일차인지 변경
-        int d = date - cur.getInt(0) + 1;
-        views.setTextViewText(R.id.dateN, Integer.toString(d));
-
-        int cal = 0;
-        cur = database.rawQuery("SELECT SUM(칼로리) FROM 사용자운동 WHERE 날짜 = "+ date, null);
-        cur.moveToFirst();
-        views.setTextViewText(R.id.food, cur.getDouble(0)+" kcal");
-        appWidgetManager.updateAppWidget(appWidgetIds, views);
-
         // There may be multiple widgets active, so update all of them
+
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
         for (int appWidgetId : appWidgetIds) {
-            updateAppWidget(context, appWidgetManager, appWidgetId);
+
+            RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.diet_widget);
+
+            //(위젯 누르면 앱 이동)
+            Intent intent = new Intent(context, MainActivity.class);
+            PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
+            //remoteViews.setOnClickPendingIntent(R.id.day, pendingIntent); //(DAY누르면 앱 이동)
+            remoteViews.setOnClickPendingIntent(R.id.dietwidget, pendingIntent); //dietwidget 레이아웃 id
+
+            //새로고침 작업을 별도의 메서드로 빼기
+            refresh(context, remoteViews);
+            //새로고침 작업이 와료 후 위젯에게 업데이트 할것을 통지
+            appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
         }
     }
     protected PendingIntent getPendingSelfIntent(Context context, String action){
