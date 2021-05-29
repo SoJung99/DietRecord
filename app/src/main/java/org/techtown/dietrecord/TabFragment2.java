@@ -24,13 +24,11 @@ import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.DialogInterface;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -48,7 +46,6 @@ import com.kakao.sdk.newtoneapi.SpeechRecognizerClient;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.List;
 import java.util.StringTokenizer;
 
 import static android.content.Context.LAYOUT_INFLATER_SERVICE;
@@ -431,12 +428,12 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         //에디터를 사용해 editText1에 있는 문자열을 textBox라는 이름으로 Sharepreferences에 저장합니다.
-        editor.putString("textBox", text); //sumC.getText().toString());
+        editor.putString("textBox", text);
         editor.commit();
         //Widget에게 값이 변경되었으니 업데이트하라는 메시지를 Broadcast를 통해서 전달합니다.
-        Intent intent = new Intent(getActivity(), NewAppWidget.class);
+        Intent intent = new Intent(getActivity(), DietWidget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), NewAppWidget.class)));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), DietWidget.class)));
         getActivity().sendBroadcast(intent);
     }
 

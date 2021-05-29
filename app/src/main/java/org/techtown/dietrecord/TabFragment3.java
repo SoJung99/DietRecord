@@ -1,7 +1,6 @@
 package org.techtown.dietrecord;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Application;
 import android.appwidget.AppWidgetManager;
 import android.content.ComponentName;
@@ -9,10 +8,8 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
-import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
@@ -31,15 +28,12 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.material.tabs.TabLayout;
 import com.kakao.auth.IApplicationConfig;
 import com.kakao.auth.KakaoAdapter;
 import com.kakao.auth.KakaoSDK;
@@ -49,8 +43,6 @@ import com.kakao.sdk.newtoneapi.SpeechRecognizerManager;
 
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Iterator;
-import java.util.List;
 import java.util.StringTokenizer;
 
 public class TabFragment3 extends Fragment implements View.OnClickListener, ExerciseAdapter.ExerciseViewClickListener, SpeechRecognizeListener {
@@ -225,9 +217,9 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("textBox2", text);
         editor.commit();
-        Intent intent = new Intent(getActivity(), NewAppWidget.class);
+        Intent intent = new Intent(getActivity(), DietWidget.class);
         intent.setAction(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), NewAppWidget.class)));
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), DietWidget.class)));
         getActivity().sendBroadcast(intent);
     }
 
