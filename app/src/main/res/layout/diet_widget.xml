@@ -26,13 +26,6 @@
                 android:textSize="24sp"
                 android:textStyle="bold" />
 
-            <Button
-                android:id="@+id/rr"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="새로고침" />
-
         </LinearLayout>
 
         <LinearLayout
@@ -46,7 +39,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="오늘 먹은 양 :"
+                android:text="오늘 먹은 양 : "
                 android:textSize="18sp" />
 
             <TextView
@@ -69,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="right"
-                android:text="오늘 운동 양 :"
+                android:text="오늘 운동 양 : "
                 android:textSize="18sp" />
 
             <TextView
