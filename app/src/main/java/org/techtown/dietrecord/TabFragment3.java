@@ -85,7 +85,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     Button submit;
     Button voice_submit;
     Button voice_info;
-
+    String ddd;
     ExerciseData voice_exer = null;
 
     private SpeechRecognizerClient client;
@@ -97,6 +97,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
     public void updateWidget(String text){ //!!
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
+
         editor.putString("textBox2", text);
         editor.commit();
         Intent intent = new Intent(getActivity(), DietWidget.class);
@@ -224,7 +225,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         recyclerView.setAdapter(adapter);
         adapter.setOnClickListener(this);
 
-        allcal.setText(adapter.getAllCalories()+"kcals");
+        allcal.setText(adapter.getAllCalories()+"kcal");
 
 
         // 여기부터 카카오 API
@@ -260,6 +261,9 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             }
 
         }.start();
+
+        // 위젯 업데이트
+        updateWidget(allcal.getText().toString());
 
         return v;
     }
@@ -350,7 +354,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
             recyclerView.setAdapter(adapter);
             adapter.setOnClickListener(this);
             adapter.notifyDataSetChanged();
-            allcal.setText(adapter.getAllCalories()+"kcals");
+            allcal.setText(adapter.getAllCalories()+"kcal");
 
             // 위젯 업데이트
             updateWidget(allcal.getText().toString());
@@ -374,7 +378,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                 //list.add(0,dataset);
 
                 time.setText(null);
-                //allcal.setText(adapter.getAllCalories()+"kcals");
+                //allcal.setText(adapter.getAllCalories()+"kcal");
                 Cursor cur = database.rawQuery("SELECT * FROM 사용자운동", null);
                 Integer n = cur.getCount() + 1;
                 Cursor c = database.rawQuery("SELECT * FROM 운동정보 WHERE 운동구분='"+dataset.exercise+"' AND 운동강도='"+dataset.power+"'", null);
@@ -396,7 +400,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
                  recyclerView.setAdapter(adapter);
                 adapter.setOnClickListener(this);
                 adapter.notifyDataSetChanged();
-                allcal.setText(adapter.getAllCalories()+"kcals");
+                allcal.setText(adapter.getAllCalories()+"kcal");
 
                 // 위젯 업데이트
                 updateWidget(allcal.getText().toString());
@@ -431,7 +435,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         recyclerView.setAdapter(adapter);
         adapter.setOnClickListener(this);
         adapter.notifyDataSetChanged();
-        allcal.setText(adapter.getAllCalories()+"kcals");
+        allcal.setText(adapter.getAllCalories()+"kcal");
 
         // 위젯 업데이트
         updateWidget(allcal.getText().toString());
