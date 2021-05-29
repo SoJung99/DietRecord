@@ -220,8 +220,7 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         return v;
     }
 
-    //!!
-    public void updateWidget(String text){
+    public void updateWidget(String text){ //!!
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString("textBox2", text);
@@ -231,7 +230,6 @@ public class TabFragment3 extends Fragment implements View.OnClickListener, Exer
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), NewAppWidget.class)));
         getActivity().sendBroadcast(intent);
     }
-    //!!
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {

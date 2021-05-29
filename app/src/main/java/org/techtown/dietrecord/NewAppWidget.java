@@ -25,20 +25,6 @@ public class NewAppWidget extends AppWidgetProvider {
         views.setTextViewText(R.id.appwidget_text2, widgetText);//
         views.setTextViewText(R.id.day, widgetText);//
 
-        /*//!! 클릭시 앱으로 이동
-        //앱을 띄우고 MainActivity로 이동한다
-        Intent intent = new Intent(Intent.ACTION_MAIN);
-        intent.addCategory(Intent.CATEGORY_LAUNCHER);
-        intent.setComponent(new ComponentName(context, MainActivity.class));
-        PendingIntent pi = PendingIntent.getActivity(context, 0, intent, 0);
-        views.setOnClickPendingIntent(R.id.day, pi);
-        //!!*/
-
-        //Intent intent = new Intent(context, MainActivity.class);
-        //PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-        //views.setOnClickPendingIntent(R.layout.new_app_widget, pendingIntent);
-        //!!
-
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
@@ -46,26 +32,22 @@ public class NewAppWidget extends AppWidgetProvider {
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
         // There may be multiple widgets active, so update all of them
-        //!!
-        super.onUpdate(context, appWidgetManager, appWidgetIds);//!!
+
+        super.onUpdate(context, appWidgetManager, appWidgetIds);
         for (int appWidgetId : appWidgetIds) {
-            //updateAppWidget(context, appWidgetManager, appWidgetId);
 
-
-            //!!
-            //updateAppWidget(context, appWidgetManager, appWidgetId);
             RemoteViews remoteViews = new RemoteViews(context.getPackageName(), R.layout.new_app_widget);
 
+            //(위젯 누르면 앱 이동)
             Intent intent = new Intent(context, MainActivity.class);
             PendingIntent pendingIntent = PendingIntent.getActivity(context, 0, intent, 0);
-            remoteViews.setOnClickPendingIntent(R.id.day, pendingIntent);
+            //remoteViews.setOnClickPendingIntent(R.id.day, pendingIntent); //(DAY누르면 앱 이동)
+            remoteViews.setOnClickPendingIntent(R.id.newappwidget, pendingIntent); //new_app_widget 레이아웃 id
 
             //새로고침 작업을 별도의 메서드로 빼기
             refresh(context, remoteViews);
             //새로고침 작업이 와료 후 위젯에게 업데이트 할것을 통지
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);
-            //!!
-
         }
     }
     private void refresh(Context context, RemoteViews remoteViews){

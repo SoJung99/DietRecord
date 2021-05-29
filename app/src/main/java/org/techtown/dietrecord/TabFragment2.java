@@ -426,8 +426,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         return v;
     }
 
-    //!!
-    public void updateWidget(String text){
+    public void updateWidget(String text){ //!!
         //액티비티와 widget간의 데이터 전달 매개체로 SharePrefereneces를 사용합니다. 코코아 프레임워크의 NSUserDefaults에 해당합니다.
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -440,7 +439,6 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_IDS, AppWidgetManager.getInstance(getActivity()).getAppWidgetIds(new ComponentName(getActivity(), NewAppWidget.class)));
         getActivity().sendBroadcast(intent);
     }
-    //!!
 
     @Override
     public void onClick(View view) {
