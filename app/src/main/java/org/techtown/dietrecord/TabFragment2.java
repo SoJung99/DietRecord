@@ -372,7 +372,9 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                 Calendar calendar = Calendar.getInstance();
                 String date = format.format(calendar.getTime());
                 String time = date.substring(0, 10).replaceAll(" ", "");
-                float sum_탄수화물, sum_단백질, sum_지방;
+                String hour = date.substring(11,12);
+
+                float sum_탄수화물 = 0, sum_단백질 = 0, sum_지방 = 0;
                 Cursor cur = database.rawQuery("SELECT sum(탄수화물) FROM 사용자식단 where 날짜 = " + Integer.parseInt(time) + "", null);
                 cur.moveToNext();
                 sum_탄수화물 = cur.getFloat(0);
@@ -385,8 +387,8 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
 
                 boolean gender = true;
                 float height, weight, old;
-                float wish_칼로리;
-                float wish_탄수화물, wish_단백질, wish_지방;
+                float wish_칼로리 = 1;
+                float wish_탄수화물 = 1, wish_단백질 = 1, wish_지방 = 1;
                 cur = database.rawQuery("SELECT 성별 FROM 사용자정보 where 날짜 = " + Integer.parseInt(time) + "", null);
                 cur.moveToNext();
                 if(cur.getString(0) == "남자") {
@@ -420,23 +422,82 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                 float rate_지방 = sum_지방 / wish_지방;
 
                 String message = null;
+
+                // 균형 잡힌 식단
                 if(rate_탄수화물 + rate_단백질 + rate_지방 == 0) {
-                    message = "균형 잡힌 식단";
+                    if(Integer.parseInt(hour) <= 10 && Integer.parseInt(hour) >= 3) {
+                        cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 9", null);
+                        cur.moveToNext();
+                        message = cur.getString(0);
+                    }
+                    else if(Integer.parseInt(hour) > 10 && Integer.parseInt(hour) <= 16) {
+                        cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 7", null);
+                        cur.moveToNext();
+                        message = cur.getString(0);
+                    }
+                    else {
+                        cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 8", null);
+                        cur.moveToNext();
+                        message = cur.getString(0);
+                    }
                 }
 
                 else {
+                    // 탄수화물이 많은 식단
                     if (rate_탄수화물 <= rate_단백질 && rate_탄수화물 <= rate_지방) {
-                        message = "탄수화물이 많은 식단...?";
+                        if(Integer.parseInt(hour) <= 10 && Integer.parseInt(hour) >= 3) {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 10", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
+                        else if(Integer.parseInt(hour) > 10 && Integer.parseInt(hour) <= 16) {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 12", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
+                        else {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 11", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
                     }
+                    // 단백질이 많은 식단
                     if (rate_단백질 <= rate_탄수화물 && rate_단백질 <= rate_지방) {
-                        message = "단백질이 많은 식단...?";
+                        if(Integer.parseInt(hour) <= 10 && Integer.parseInt(hour) >= 3) {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 1", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
+                        else if(Integer.parseInt(hour) > 10 && Integer.parseInt(hour) <= 16) {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 2", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
+                        else {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 3", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
                     }
+                    // 지방이 많은 식단
                     if (rate_지방 <= rate_탄수화물 && rate_지방 <= rate_단백질) {
-                        message = "지방이 많은 식단...?";
+                        if(Integer.parseInt(hour) <= 10 && Integer.parseInt(hour) >= 3) {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 4", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
+                        else if(Integer.parseInt(hour) > 10 && Integer.parseInt(hour) <= 16) {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 5", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
+                        else {
+                            cur = database.rawQuery("SELECT 음식리스트 FROM 식단정보 where num = 6", null);
+                            cur.moveToNext();
+                            message = cur.getString(0);
+                        }
                     }
                 }
-
-
 
                 new AlertDialog.Builder(getActivity())
                         .setTitle("추천 식단")
@@ -445,8 +506,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                             @Override
                             public void onClick(DialogInterface dialog, int which) { }})
                         .show();
-            }
-        });        // 음성인식 예시 보기 버튼 (btn_ex 버튼 눌렸을 때)
+            }});
         Button btnEx = (Button)v.findViewById(R.id.btn_ex);
         btnEx.setOnClickListener(new View.OnClickListener() {
             @Override

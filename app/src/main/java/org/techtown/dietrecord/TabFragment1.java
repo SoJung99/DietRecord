@@ -13,6 +13,7 @@ import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -70,10 +71,8 @@ import java.util.concurrent.TimeUnit;
 
 import static androidx.viewpager.widget.PagerAdapter.POSITION_NONE;
 
-
 @RequiresApi(api = Build.VERSION_CODES.O)
 public class TabFragment1 extends Fragment {
-
 
     private SignInButton signInButton; // 구글 로그인 버튼
     private GoogleSignInClient mGoogleSignInClient;
@@ -81,6 +80,7 @@ public class TabFragment1 extends Fragment {
     private FirebaseAuth mAuth;
     private int RC_SIGN_IN=123;
     Value wr; // 7이면 걷기 8이면 달리기
+    int flag = 0;
 
     long laststartTime, lastendTime; // 구글핏의 마지막 데이터 시간
 
@@ -108,8 +108,8 @@ public class TabFragment1 extends Fragment {
     }
 
     final String[] gender = new String[]{"남자", "여자"};
-    int cal_recom_take , cal_recom_burning , Car_entire , Pro_entire , Fat_entire , water_recom = 2000; // 권장
-    float cal_present_take = 0, cal_present_burning = 0, Car_present = 0, Pro_present = 0, Fat_present = 0, water_present = 0; // 실제
+    int cal_recom_take , Car_entire , Pro_entire , Fat_entire , water_recom = 2000; // 권장
+    float cal_present_take , cal_present_burning , Car_present , Pro_present , Fat_present , water_present ; // 실제
 
     @SuppressLint("SetTextI18n")
     @Nullable
@@ -125,7 +125,6 @@ public class TabFragment1 extends Fragment {
         Button btn4 = v.findViewById(R.id.button4);
 
         ProgressBar pb1 = v.findViewById(R.id.progressBar1);
-        ProgressBar pb2 = v.findViewById(R.id.progressBar2);
         ProgressBar pb3 = v.findViewById(R.id.progressBar3);
         ProgressBar pb4 = v.findViewById(R.id.progressBar4);
         ProgressBar pb5 = v.findViewById(R.id.progressBar5);
@@ -188,26 +187,6 @@ public class TabFragment1 extends Fragment {
         float w = cur.getFloat(0);
         tv6.setText("  몸무게 : " + w);
 
-        Cursor cur_c = database.rawQuery("select sum(탄수화물) from 사용자식단 where 날짜 = " + today, null);
-        cur_c.moveToNext();
-        Car_present = cur_c.getFloat(0);
-
-        int int_car_present = (int)Car_present;
-        pb4.setProgress(int_car_present);
-
-        Cursor cur_p = database.rawQuery("select sum(단백질) from 사용자식단 where 날짜 = " + today, null);
-        cur_p.moveToNext();
-        Pro_present = cur_p.getFloat(0);
-
-        int int_pro_present = (int)Pro_present;
-        pb5.setProgress(int_pro_present);
-
-        Cursor cur_f = database.rawQuery("select sum(지방) from 사용자식단 where 날짜 = " + today, null);
-        cur_f.moveToNext();
-        Fat_present = cur_f.getFloat(0);
-
-        int int_fat_present = (int)Fat_present;
-        pb6.setProgress(int_fat_present);
 
         Cursor cur_t = database.rawQuery("SELECT sum(칼로리) FROM 사용자식단 WHERE 날짜 = " + today , null);
         cur_t.moveToNext();
@@ -221,106 +200,135 @@ public class TabFragment1 extends Fragment {
         sql = "UPDATE 사용자정보 SET 소모칼로리 = " + sum + " WHERE 날짜 = " + today;
         database.execSQL(sql);
 
+        Handler handler1 = new Handler();
+        Handler handler2 = new Handler();
 
-        // 해리스 베네딕트 하루 권장 칼로리 계산
+        Thread th1 = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                while(true) {
+                    // 해리스 베네딕트 하루 권장 칼로리 계산
+                    if(n.equals("남자")){
+                        cal_recom_take = (int) ((66.47 + (13.75 * w) + (5 * h) - (6.76 * m)) * 1.375 - 500);
+                    }else{
+                        cal_recom_take = (int) ((655.1 + (9.56 * w) + (1.85 * h) - (4.68 * m)) * 1.375 - 500);
+                    }
+
+                    Cursor cur1 = database.rawQuery("SELECT sum(칼로리) FROM 사용자식단 WHERE 날짜 = " + today, null);
+                    cur1.moveToNext();
+                    cal_present_take = cur1.getFloat(0);
+
+                    int int_cal_present_take = (int)cal_present_take;
+
+                    Cursor cur_c = database.rawQuery("select sum(탄수화물) from 사용자식단 where 날짜 = " + today, null);
+                    cur_c.moveToNext();
+                    Car_present = cur_c.getFloat(0);
+                    int int_car_present = (int)Car_present;
+
+                    Cursor cur_p = database.rawQuery("select sum(단백질) from 사용자식단 where 날짜 = " + today, null);
+                    cur_p.moveToNext();
+                    Pro_present = cur_p.getFloat(0);
+                    int int_pro_present = (int)Pro_present;
+
+                    Cursor cur_f = database.rawQuery("select sum(지방) from 사용자식단 where 날짜 = " + today, null);
+                    cur_f.moveToNext();
+                    Fat_present = cur_f.getFloat(0);
+                    int int_fat_present = (int)Fat_present;
+
+                    Cursor cur_w = database.rawQuery("SELECT sum(양) FROM 사용자식단 WHERE 음식구분 = '물' AND 날짜 = " + today, null);
+                    cur_w.moveToNext();
+                    water_present = 200 * cur_w.getFloat(0);
+
+                    tv12.setText("   하루 권장 섭취 수분 : " + water_recom);
+                    tv13.setText("   현재 섭취 수분 : "  + water_present);
+
+                    int int_water_present = (int)water_present;
+
+                    Cursor cur2 = database.rawQuery("SELECT sum(칼로리) FROM 사용자운동 WHERE 날짜 = " + today, null);
+                    cur2.moveToNext();
+                    cal_present_burning = cur2.getFloat(0);
+
+                    handler1.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            pb1.setMax(cal_recom_take);
+                            pb1.setProgress(int_cal_present_take);
+
+                            tv8.setText("   오늘의 권장 섭취 칼로리 : " + cal_recom_take);
+                            tv9.setText("   현재 섭취 칼로리 : " + cal_present_take);
+
+                            Pro_entire = (int) (2.20462 * w * 0.9);
+                            pb5.setMax(Pro_entire);
+                            pb5.setProgress(int_pro_present);
+
+                            Fat_entire = (int) (2.20462 * w * 0.4);
+                            pb6.setMax(Fat_entire);
+                            pb6.setProgress(int_fat_present);
+
+                            Car_entire = cal_recom_take - (Pro_entire * 4 + Fat_entire * 9) / 4;
+                            pb4.setMax(Car_entire);
+                            pb4.setProgress(int_car_present);
+
+                            pb3.setMax(water_recom);
+                            pb3.setProgress(int_water_present);
+
+                            tv11.setText("   현재 운동 칼로리 : " + cal_present_burning);
+                        }
+                    });
+
+                    try {
+                        Thread.sleep(1000);
+                    } catch (InterruptedException e) {    }
+                }
+            }
+        });
+        th1.start();
+
+        float BMR;
         if(n.equals("남자")){
-            cal_recom_take = (int) ((66 + (13.7 * w) + (5 * h) - (6.5 * m)) * 1.375 - 500);
+            BMR = (float) (66.47 + (13.75 * w) + (5 * h) - (6.76 * m));
         }else{
-            cal_recom_take = (int) ((655 + (9.6 * w) + (1.8 * h) - (4.7 * m)) * 1.375 - 500);
+            BMR = (float) (655.1 + (9.56 * w) + (1.85 * h) - (4.68 * m));
         }
-
-        Cursor cur1 = database.rawQuery("SELECT 섭취칼로리 FROM 사용자정보", null);
-        float a;
-        if (cur1 != null) {
-            while( cur1.moveToNext() ) {
-                a = cur1.getFloat(0);
-                cal_present_take = a;
-            }
-        }
-
-
-
-        int int_cal_present_take = (int)cal_present_take;
-        pb1.setMax(cal_recom_take);
-        pb1.setProgress(int_cal_present_take);
-
-        tv8.setText("   오늘의 권장 섭취 칼로리 : " + cal_recom_take);
-        tv9.setText("   현재 섭취 칼로리 : " + cal_present_take);
-
-        Cursor cur2 = database.rawQuery("SELECT 소모칼로리 FROM 사용자정보", null);
-        if (cur2 != null) {
-            while( cur2.moveToNext() ) {
-                a = cur2.getFloat(0);
-                cal_present_burning = a;
-            }
-        }
-
-        int int_cal_present_burning = (int)cal_present_burning;
-        pb2.setMax(cal_recom_burning);
-        pb2.setProgress(int_cal_present_burning);
-
-        tv10.setText("   오늘의 권장 운동 칼로리 : " + cal_recom_burning);
-        tv11.setText("   현재 운동 칼로리 : " + cal_present_burning);
-
-        Cursor cur_w = database.rawQuery("SELECT sum(양) FROM 사용자식단 WHERE 음식구분 = '물' AND 날짜 = " + today, null);
-        cur_w.moveToNext();
-        water_present = cur_w.getFloat(0);
-
-        tv12.setText("   하루 권장 섭취 수분 : " + water_recom);
-        tv13.setText("   현재 섭취 수분 : "  + water_present);
-
-        int int_water_present = (int)water_present;
-        pb3.setMax(water_recom);
-        pb3.setProgress(int_water_present);
-
-        Pro_entire = (int) (2.20462 * w * 0.9);
-        pb5.setMax(Pro_entire);
-        Fat_entire = (int) (2.20462 * w * 0.4);
-        pb6.setMax(Fat_entire);
-        Car_entire = cal_recom_take - (Pro_entire * 4 + Fat_entire * 9) / 4;
-        pb4.setMax(Car_entire);
-
-
-
+        tv10.setText("   내 기초대사량 : " + BMR);
 
         // 날마다 사용자정보 추가
-        cur = database.rawQuery("SELECT * FROM 사용자정보 WHERE 날짜 = " + today, null);
-        int c = cur.getCount();
-        if (c == 1){
-        } else{
-            calendar.add(calendar.DATE, -1);
-            date = format.format(calendar.getTime());
-            time = date.substring(0, 10).replaceAll(" ", "");
-            int yesterday = Integer.parseInt(time);
+        calendar.add(calendar.DATE, 1);
+        date = format.format(calendar.getTime());
+        time = date.substring(0, 10).replaceAll(" ", "");
+        int tomorrow = Integer.parseInt(time);
 
-            cur = database.rawQuery("SELECT 성별 FROM 사용자정보 WHERE 날짜 = " + yesterday, null);
+        cur = database.rawQuery("SELECT * FROM 사용자정보 WHERE 날짜 = " + tomorrow, null);
+        int c = cur.getCount();
+        if (c > 0){
+        }else{
+            cur = database.rawQuery("SELECT 성별 FROM 사용자정보 WHERE 날짜 = " + today, null);
             cur.moveToNext();
             String s = cur.getString(0);
 
-            cur = database.rawQuery("SELECT 나이 FROM 사용자정보 WHERE 날짜 = " + yesterday, null);
+            cur = database.rawQuery("SELECT 나이 FROM 사용자정보 WHERE 날짜 = " + today, null);
             cur.moveToNext();
             int age = cur.getInt(0);
 
-            cur = database.rawQuery("SELECT 키 FROM 사용자정보 WHERE 날짜 = " + yesterday, null);
+            cur = database.rawQuery("SELECT 키 FROM 사용자정보 WHERE 날짜 = " + today, null);
             cur.moveToNext();
             float h1 = cur.getFloat(0);
 
-            cur = database.rawQuery("SELECT 몸무게 FROM 사용자정보 WHERE 날짜 = " + yesterday, null);
+            cur = database.rawQuery("SELECT 몸무게 FROM 사용자정보 WHERE 날짜 = " + today, null);
             cur.moveToNext();
             float w1 = cur.getFloat(0);
 
-            cur = database.rawQuery("SELECT 소모칼로리 FROM 사용자정보 WHERE 날짜 = " + yesterday, null);
+            cur = database.rawQuery("SELECT 소모칼로리 FROM 사용자정보 WHERE 날짜 = " + today, null);
             cur.moveToNext();
             float b = cur.getFloat(0);
 
-            cur = database.rawQuery("SELECT 섭취칼로리 FROM 사용자정보 WHERE 날짜 = " + yesterday, null);
+            cur = database.rawQuery("SELECT 섭취칼로리 FROM 사용자정보 WHERE 날짜 = " + today, null);
             cur.moveToNext();
             float t = cur.getFloat(0);
 
-            sql = "INSERT INTO 사용자정보 (날짜, 성별, 나이, 키, 몸무게, 소모칼로리, 섭취칼로리) VALUES ("+yesterday+", "+s+", "+age+", "+h1+", "+w1+", "+b+", "+t+")";
+            sql = "INSERT INTO 사용자정보 (날짜, 성별, 나이, 키, 몸무게, 소모칼로리, 섭취칼로리) VALUES (" + tomorrow + ", '" + s + "', " + age + ", " + h1 + ", " + w1 + ", " + b + ", " + t + ")";
             database.execSQL(sql);
         }
-
 
         btn1.setOnClickListener(new View.OnClickListener() { // 성별 변경 버튼
 
@@ -342,25 +350,19 @@ public class TabFragment1 extends Fragment {
 
                         // ADD DB에 gender[a] 저장하는 코드
                         if(a == 0) {
-                            SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                            Calendar calendar = Calendar.getInstance();
-                            String date = format.format(calendar.getTime());
-                            String time = date.substring(0, 10).replaceAll(" ", "");
-                            int today = Integer.parseInt(time);
-
                             String sql = "UPDATE 사용자정보 SET 성별 ='남자' WHERE 날짜 = " + today;
+                            database.execSQL(sql);
+
+                            sql = "UPDATE 사용자정보 SET 성별 ='남자' WHERE 날짜 = " + tomorrow;
                             database.execSQL(sql);
 
                             refresh();
 
                         } else{
-                            SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                            Calendar calendar = Calendar.getInstance();
-                            String date = format.format(calendar.getTime());
-                            String time = date.substring(0, 10).replaceAll(" ", "");
-                            int today = Integer.parseInt(time);
-
                             String sql = "UPDATE 사용자정보 SET 성별 ='여자' WHERE 날짜 = " + today;
+                            database.execSQL(sql);
+
+                            sql = "UPDATE 사용자정보 SET 성별 ='여자' WHERE 날짜 = " + tomorrow;
                             database.execSQL(sql);
 
                             refresh();
@@ -428,13 +430,10 @@ public class TabFragment1 extends Fragment {
                         // ADD DB에 np.getValue() 저장하는 코드
                         int a = np.getValue();
 
-                        SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        Calendar calendar = Calendar.getInstance();
-                        String date = format.format(calendar.getTime());
-                        String time = date.substring(0, 10).replaceAll(" ", "");
-                        int today = Integer.parseInt(time);
-
                         String sql = "UPDATE 사용자정보 SET 나이 = "+ a + " WHERE 날짜 = " + today;
+                        database.execSQL(sql);
+
+                        sql = "UPDATE 사용자정보 SET 나이 = "+ a + " WHERE 날짜 = " + tomorrow;
                         database.execSQL(sql);
 
                         refresh();
@@ -522,6 +521,9 @@ public class TabFragment1 extends Fragment {
                         String sql = "UPDATE 사용자정보 SET 키 = " + a + " WHERE 날짜 = " + today;
                         database.execSQL(sql);
 
+                        sql = "UPDATE 사용자정보 SET 키 = " + a + " WHERE 날짜 = " + tomorrow;
+                        database.execSQL(sql);
+
                         refresh();
 
                         heightDialog.dismiss();
@@ -598,13 +600,10 @@ public class TabFragment1 extends Fragment {
                         // ADD DB에 np.getValue() 저장하는 코드
                         float a = (float) (np1.getValue() + 0.1*np2.getValue());
 
-                        SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
-                        Calendar calendar = Calendar.getInstance();
-                        String date = format.format(calendar.getTime());
-                        String time = date.substring(0, 10).replaceAll(" ", "");
-                        int today = Integer.parseInt(time);
-
                         String sql = "UPDATE 사용자정보 SET 몸무게 = " + a + " WHERE 날짜 = " + today;
+                        database.execSQL(sql);
+
+                        sql = "UPDATE 사용자정보 SET 몸무게 = " + a + " WHERE 날짜 = " + tomorrow;
                         database.execSQL(sql);
 
                         refresh();
@@ -661,7 +660,7 @@ public class TabFragment1 extends Fragment {
                             new OnCompleteListener<Void>() {
                                 @Override
                                 public void onComplete(@NonNull Task<Void> task) {
-                                    if (task.isSuccessful()) {
+                                    if (task.isSuccessful() && mGoogleSignInClient.getApplicationContext() != null) {
                                         Fitness.getRecordingClient(getContext(), GoogleSignIn.getLastSignedInAccount(getContext()))
                                                 .subscribe(DataType.TYPE_CALORIES_EXPENDED)
                                                 .addOnCompleteListener(
@@ -671,14 +670,26 @@ public class TabFragment1 extends Fragment {
                                                                 if (task.isSuccessful()) {
                                                                     Log.i(TAG, "Successfully subscribed!");
                                                                     // readData 반복실행
-                                                                    TimerTask adTast = new TimerTask() {
-                                                                        public void run() {
-                                                                            Log.e("adTast ", "timer");
-                                                                            readData();
+                                                                    Thread th2 = new Thread(new Runnable() {
+                                                                        @Override
+                                                                        public void run() { // Thread 로 작업할 내용을 구현
+                                                                            while(true) {
+                                                                                readData();
+
+                                                                                handler2.post(new Runnable() {
+                                                                                    @Override
+                                                                                    public void run() { // 화면에 변경하는 작업을 구현
+                                                                                    }
+                                                                                });
+
+                                                                                try {
+                                                                                    Thread.sleep(10000); // 시간지연
+                                                                                } catch (InterruptedException e) {    }
+                                                                            }
                                                                         }
-                                                                    };
-                                                                    Timer timer = new Timer();
-                                                                    timer.schedule(adTast, 0, 10000); // 0초후 첫실행, 1분마다 반복실행
+                                                                    });
+                                                                    th2.start();
+
                                                                 } else {
                                                                     Log.w(TAG, "There was a problem subscribing.", task.getException());
                                                                 }
@@ -695,11 +706,14 @@ public class TabFragment1 extends Fragment {
         return v;
     }
 
-    private void refresh(){
+    public void refresh(){
         FragmentTransaction ft = getFragmentManager().beginTransaction();
-
-        ft.detach(this).attach(this).commit();
+        if(getActivity() != null) {
+            ft.detach(this).attach(this).commit();
+        }
     }
+
+
 
     // 로그인 인 텐트
     // 로그인 할 구글계정 선택, 권한 부여 메시지 표시
@@ -707,7 +721,6 @@ public class TabFragment1 extends Fragment {
         Intent signInIntent = mGoogleSignInClient.getSignInIntent();
         startActivityForResult(signInIntent, RC_SIGN_IN);
         ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.ACTIVITY_RECOGNITION}, 1);
-        ActivityCompat.requestPermissions(getActivity(), new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE}, 1);
     }
 
     // onActivityResult란 일반적으로 main액티비티(로그인 버튼 있는 화면)에서 sub액티비티(구글 아이디, 비번 입력 화면 등)를 호출하여 넘어갔다가 다시 main액티비티로 돌아올때 사용하는 메소드
@@ -730,14 +743,26 @@ public class TabFragment1 extends Fragment {
         if (resultCode == Activity.RESULT_OK) {// 로그인 성공 시
             if (requestCode == REQUEST_OAUTH_REQUEST_CODE) {// 권한 얻었을 시
                 // readData 반복실행
-                TimerTask adTast = new TimerTask() {
-                    public void run() {
-                        Log.e("adTast ", "timer");
-                        readData();
+                Handler handler3 = new Handler();
+                Thread th3 = new Thread(new Runnable() {
+                    @Override
+                    public void run() { // Thread 로 작업할 내용을 구현
+                        while(true) {
+                            readData();
+
+                            handler3.post(new Runnable() {
+                                @Override
+                                public void run() { // 화면에 변경하는 작업을 구현
+                                }
+                            });
+
+                            try {
+                                Thread.sleep(10000); // 시간지연
+                            } catch (InterruptedException e) {    }
+                        }
                     }
-                };
-                Timer timer = new Timer();
-                timer.schedule(adTast, 0, 10000); // 0초후 첫실행, 1분마다 반복실행
+                });
+                th3.start();
             }
         }
     }
@@ -773,13 +798,14 @@ public class TabFragment1 extends Fragment {
 
     // 구글핏 데이터 가져오기
     // 원하는 시간대 조정하기 쉽게 시간은 밀리세컨드 단위로 통일
-    // 밀리세컨드 단위로 바꿔줌
+
+    // 밀리세컨드를 날짜시간단위로 바꿔줌
     public static String milli2string(long time) {
         SimpleDateFormat format = new SimpleDateFormat("YYYY MM dd HH:mm:ss", Locale.UK);
         return format.format(time);
     }
 
-    // 걸음수 조회
+    // 구글핏 칼로리 조회
     private void readData() {
         final Calendar cal = Calendar.getInstance();
         Date now = Calendar.getInstance().getTime();
@@ -891,7 +917,6 @@ public class TabFragment1 extends Fragment {
                                     String sql = "INSERT INTO 사용자운동 (num, 운동구분, 강도, 시간, 칼로리, 날짜, 시작시간) VALUES (" + n + ", '" + "뛰기" + "', '" + level + "', " + (lastendTime - laststartTime) / 60000 + ", " + sum + ", '" + Integer.parseInt(time) + "', '" + Integer.parseInt(milli2string(laststartTime).substring(10).replaceAll(":", "").replaceAll(" ", "")) + "')";
                                     database.execSQL(sql);
                                 }
-                                refresh();
                             }
                         }
                     });
@@ -902,6 +927,5 @@ public class TabFragment1 extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
     }
-
 
 }
