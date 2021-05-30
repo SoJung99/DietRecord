@@ -75,7 +75,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
     SQLiteDatabase database ;
 
 
-    public void updateWidget(String text){ //!!
+    public void updateWidget(String text){
         //액티비티와 widget간의 데이터 전달 매개체로 SharePrefereneces를 사용합니다. 코코아 프레임워크의 NSUserDefaults에 해당합니다.
         SharedPreferences sharedPreferences = getActivity().getSharedPreferences("sharedPreferences", Context.MODE_PRIVATE);
         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -164,6 +164,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
         recyclerADAPTER3.notifyDataSetChanged();
 
         sumC.setText((recyclerADAPTER.SumCalories(LIST)+recyclerADAPTER2.SumCalories(LIST2)+recyclerADAPTER3.SumCalories(LIST3))+"kcal");
+        updateWidget(sumC.getText().toString()); // 위젯 업데이트
         sumC1.setText(recyclerADAPTER.SumCalories(LIST)+"kcal");
         sumC2.setText(recyclerADAPTER2.SumCalories(LIST2)+"kcal");
         sumC3.setText(recyclerADAPTER3.SumCalories(LIST3)+"kcal");
@@ -317,6 +318,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                                 recyclerADAPTER2.notifyDataSetChanged();
                                 sumC2.setText(recyclerADAPTER2.SumCalories(LIST2)+"kcal");
                                 sumC.setText((recyclerADAPTER.SumCalories(LIST)+recyclerADAPTER2.SumCalories(LIST2)+recyclerADAPTER3.SumCalories(LIST3))+"kcal");
+                                updateWidget(sumC.getText().toString()); // 위젯 업데이트
                             }})
                         .setNeutralButton("아니오", new DialogInterface.OnClickListener() {
                             @Override
@@ -338,6 +340,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                                 recyclerADAPTER3.notifyDataSetChanged();
                                 sumC3.setText(recyclerADAPTER3.SumCalories(LIST3)+"kcal");
                                 sumC.setText((recyclerADAPTER.SumCalories(LIST)+recyclerADAPTER2.SumCalories(LIST2)+recyclerADAPTER3.SumCalories(LIST3))+"kcal");
+                                updateWidget(sumC.getText().toString()); // 위젯 업데이트
                             }
                         })
                         .setNeutralButton("아니오", new DialogInterface.OnClickListener() {
@@ -507,6 +510,7 @@ public class TabFragment2 extends Fragment implements View.OnClickListener, Spee
                             public void onClick(DialogInterface dialog, int which) { }})
                         .show();
             }});
+        // 음성인식 예시 보기 버튼 (btn_ex 버튼 눌렸을 때)
         Button btnEx = (Button)v.findViewById(R.id.btn_ex);
         btnEx.setOnClickListener(new View.OnClickListener() {
             @Override
