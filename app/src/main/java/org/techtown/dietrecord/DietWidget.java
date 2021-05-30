@@ -12,7 +12,10 @@ import android.database.sqlite.SQLiteDatabase;
 import android.widget.RemoteViews;
 import android.widget.Toast;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 
 /**
  * Implementation of App Widget functionality.
@@ -72,12 +75,22 @@ public class DietWidget extends AppWidgetProvider {
             refresh(context, remoteViews);
 
             // N일차 바꾸기
-            Cursor ccc = database.rawQuery("SELECT 날짜 FROM 사용자정보", null);
-            ccc.moveToFirst();
-            calendar = Calendar.getInstance();
-            int dd =calendar.get(Calendar.YEAR)*10000+(calendar.get(Calendar.MONTH)+1)*100+calendar.get(Calendar.DATE);
 
-            remoteViews.setTextViewText(R.id.dateN,dd-ccc.getInt(0)+1+"일차");
+            Cursor cur_date = database.rawQuery("select 날짜 from 사용자정보 ", null);
+            cur_date.moveToNext();
+            int a_date = cur_date.getInt(0);
+            String before = Integer.toString(a_date);
+
+            try {
+                Date d1 = new SimpleDateFormat("yyyyMMdd").parse(before);
+                Date d2 = new Date();
+                long diffDay = (d2.getTime() - d1.getTime()) / (24*60*60*1000);
+                diffDay++;
+                remoteViews.setTextViewText(R.id.dateN,diffDay+"일차");
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
 
             //새로고침 작업이 와료 후 위젯에게 업데이트 할것을 통지
             appWidgetManager.updateAppWidget(appWidgetId, remoteViews);

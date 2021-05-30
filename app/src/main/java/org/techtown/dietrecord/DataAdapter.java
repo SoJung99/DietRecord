@@ -100,7 +100,6 @@ public class DataAdapter
                     user.setTime(Integer.toString(mCur.getInt(3)));
                     user.setCalories(Integer.toString(mCur.getInt(4)));
 
-
                     // 리스트에 넣기
                     userList.add(user);
                 }
