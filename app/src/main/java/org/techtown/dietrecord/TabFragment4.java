@@ -212,6 +212,9 @@ public class TabFragment4 extends Fragment{
                 legend.setForm(Legend.LegendForm.CIRCLE);
                 int[] colorClassArray = new int[] {Color.RED, Color.BLUE};
                 String[] legendName = {"kcal" , "Day"};
+                if (attribute_switch == 3) {
+                    legendName[0] = "kg";
+                }
                 LegendEntry[] legendEntries = new LegendEntry[2];
 
                 for(int i=0;i<legendEntries.length;i++) {
@@ -312,6 +315,9 @@ public class TabFragment4 extends Fragment{
                 legend.setForm(Legend.LegendForm.CIRCLE);
                 int[] colorClassArray = new int[] {Color.RED, Color.BLUE};
                 String[] legendName = {"kcal" , "Week"};
+                if (attribute_switch == 3) {
+                    legendName[0] = "kg";
+                }
                 LegendEntry[] legendEntries = new LegendEntry[2];
 
                 for(int i=0;i<legendEntries.length;i++) {
@@ -550,7 +556,7 @@ public class TabFragment4 extends Fragment{
                 legend.setTextSize(15);
                 legend.setForm(Legend.LegendForm.CIRCLE);
                 int[] colorClassArray = new int[] {Color.RED, Color.BLUE};
-                String[] legendName = {"kcal" , "Day"};
+                String[] legendName = {"kg" , "Day"};
                 if(day == 7) {
                     legendName[1] = "Week";
                 }
